@@ -433,7 +433,7 @@ body {
 .guide-assistant {
     position: absolute;
     top: 15px;
-    left: 50%; /* antes 120px -> súbelo */
+    left: 70px; /* antes 120px -> súbelo */
 
     display: flex;
     align-items: center;
