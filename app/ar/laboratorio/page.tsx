@@ -41,13 +41,15 @@ export default function LaboratorioPage() {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: { ideal: "environment" },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
                 },
             });
 
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
+
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current?.play();
+                };
             }
 
             interval = setInterval(async () => {
@@ -178,7 +180,7 @@ export default function LaboratorioPage() {
 
             {/* Instrucción */}
 
-           {/* <div className="instruction-card">
+            {/* <div className="instruction-card">
                 <Navigation size={24} />
 
                 <div>

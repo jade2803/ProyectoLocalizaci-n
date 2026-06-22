@@ -13,6 +13,11 @@
 }
 
 body {
+  margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   background: var(--solca-bg);
   font-family: "Segoe UI", sans-serif;
 }
@@ -187,20 +192,25 @@ body {
 /* ========================= */
 
 .ar-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+
+    position: fixed;   /* antes relative */
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
     overflow: hidden;
     background: black;
 }
 
 .camera-video {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: black;
 }
 
-/* INSTRUCCION */
+/* INSTRUCCION 
 
 .instruction-card {
     position: absolute;
@@ -241,7 +251,7 @@ body {
 .instruction-card h2 {
     font-size: 1.2rem;
     font-weight: 700;
-}
+} */
 
 /* FLECHA */
 
@@ -422,40 +432,36 @@ body {
 
 .guide-assistant {
     position: absolute;
-
-    left: 15px;
-    top: 120px;
+    top: 15px;
+    left: 50%; /* antes 120px -> súbelo */
 
     display: flex;
     align-items: center;
+    gap: 14px;
 
-    gap: 10px;
-
-    z-index: 50;
+    z-index: 60;
 }
 
 .guide-image {
-    width: 80px;
+    width: 90px; /* antes 80px */
     height: auto;
 
-    filter:
-        drop-shadow(0 8px 15px rgba(0,0,0,.25));
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,.25));
 }
 
 .guide-bubble {
     background: rgba(255,255,255,.95);
-
     color: #005baa;
 
-    padding: 10px 14px;
+    padding: 16px 22px; /* más grande */
+    border-radius: 22px;
 
-    border-radius: 18px;
+    max-width: 200px; /* antes 180 */
+    min-height: 70px;
 
-    max-width: 180px;
-
-    font-size: .85rem;
-
-    font-weight: 600;
+    font-size: 1.0rem; /* antes .85rem */
+    font-weight: 700;
+    line-height: 1.3;
 
     box-shadow: 0 6px 15px rgba(0,0,0,.15);
 }
