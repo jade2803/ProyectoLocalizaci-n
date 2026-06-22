@@ -94,7 +94,7 @@ export default function ImagenesPage() {
                         case "AtencionCliente":
                             setCurrentStep(2);
                             setDirection("up");
-                            setInstruction("Continúe recto hacia el Ascensor");
+                            setInstruction("Continúe recto por el camino entre las gradas y el Ascensor");
                             break;
 
                         case "Ascensor":

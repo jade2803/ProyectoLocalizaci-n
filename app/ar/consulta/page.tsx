@@ -96,18 +96,24 @@ export default function ConsultaPage() {
 
                         case "AtencionCliente":
                             setCurrentStep(2);
+                            setDirection("up");
+                            setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
+                            break;
+
+                        case "Ascensor":
+                            setCurrentStep(3);
                             setDirection("right");
-                            setInstruction("Gire a la derecha hacia el pasillo");
+                            setInstruction("Al pasar el ascensor, gire a la derecha");
                             break;
 
                         case "Pasillo":
-                            setCurrentStep(3);
+                            setCurrentStep(4);
                             setDirection("up");
-                            setInstruction("Continúe recto hacia Consulta Externa");
+                            setInstruction("Continúe recto por el pasillo. A mano derecha verá una puerta verde");
                             break;
 
                         case "ConsultaExterna":
-                            setCurrentStep(4);
+                            setCurrentStep(5);
                             setDirection("arrived");
                             setInstruction("Ha llegado a Consulta Externa");
                             break;

@@ -96,41 +96,31 @@ export default function LaboratorioPage() {
                         case "PuertaPrincipal":
                             setCurrentStep(1);
                             setDirection("up");
-                            setInstruction(
-                                "Avance hacia Atención al Cliente"
-                            );
+                            setInstruction("Avance hacia Atención al Cliente");
                             break;
 
                         case "AtencionCliente":
                             setCurrentStep(2);
+                            setDirection("up");
+                            setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
+                            break;
+
+                        case "Ascensor":
+                            setCurrentStep(3);
                             setDirection("right");
-                            setInstruction(
-                                "Gire a la derecha hacia el pasillo"
-                            );
+                            setInstruction("Al pasar el ascensor, gire a la derecha hacia el pasillo");
                             break;
 
                         case "Pasillo":
-                            setCurrentStep(3);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto hacia Consulta Externa"
-                            );
-                            break;
-
-                        case "ConsultaExterna":
                             setCurrentStep(4);
                             setDirection("up");
-                            setInstruction(
-                                "Continúe recto hacia Laboratorio Clínico"
-                            );
+                            setInstruction("Continúe recto por el pasillo y a su izquierda verá la sala de espera de Laboratorio Clínico ");
                             break;
 
                         case "LaboratorioClinico":
                             setCurrentStep(5);
                             setDirection("arrived");
-                            setInstruction(
-                                "Ha llegado al Laboratorio Clínico"
-                            );
+                            setInstruction("Ha llegado a Laboratorio Clínico");
                             break;
                     }
                 } finally {
