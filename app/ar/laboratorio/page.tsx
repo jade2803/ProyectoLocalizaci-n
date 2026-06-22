@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import * as tmImage from "@teachablemachine/image";
 import {
-    FaArrowUp,
-    FaArrowRight,
-    FaCheckCircle,
-} from "react-icons/fa";
+    ArrowUp,
+    ArrowRight,
+    CheckCircle2,
+    MapPin,
+    Navigation,
+} from "lucide-react";
 
 export default function LaboratorioPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,6 +23,9 @@ export default function LaboratorioPage() {
     const [direction, setDirection] = useState<
         "up" | "right" | "arrived" | "none"
     >("none");
+
+    const [showRoute, setShowRoute] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -87,6 +92,7 @@ export default function LaboratorioPage() {
 
                     switch (detected) {
                         case "PuertaPrincipal":
+                            setCurrentStep(1);
                             setDirection("up");
                             setInstruction(
                                 "Avance hacia Atención al Cliente"
@@ -94,6 +100,7 @@ export default function LaboratorioPage() {
                             break;
 
                         case "AtencionCliente":
+                            setCurrentStep(2);
                             setDirection("right");
                             setInstruction(
                                 "Gire a la derecha hacia el pasillo"
@@ -101,6 +108,7 @@ export default function LaboratorioPage() {
                             break;
 
                         case "Pasillo":
+                            setCurrentStep(3);
                             setDirection("up");
                             setInstruction(
                                 "Continúe recto hacia Consulta Externa"
@@ -108,6 +116,7 @@ export default function LaboratorioPage() {
                             break;
 
                         case "ConsultaExterna":
+                            setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
                                 "Continúe recto hacia Laboratorio Clínico"
@@ -115,6 +124,7 @@ export default function LaboratorioPage() {
                             break;
 
                         case "LaboratorioClinico":
+                            setCurrentStep(5);
                             setDirection("arrived");
                             setInstruction(
                                 "Ha llegado al Laboratorio Clínico"
@@ -142,40 +152,119 @@ export default function LaboratorioPage() {
     const renderArrow = () => {
         switch (direction) {
             case "up":
-                return <FaArrowUp size={120} />;
+                return <ArrowUp size={50} strokeWidth={3} />;
+
             case "right":
-                return <FaArrowRight size={120} />;
+                return <ArrowRight size={50} strokeWidth={3} />;
+
             case "arrived":
-                return <FaCheckCircle size={120} />;
+                return <CheckCircle2 size={50} strokeWidth={3} />;
+
             default:
                 return null;
         }
     };
 
     return (
-        <div className="relative w-screen h-screen bg-black">
+        <div className="ar-container">
+
             <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 muted
-                className="w-full h-full object-cover"
+                className="camera-video"
             />
 
-            <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20 w-[90%]">
-                <div className="bg-black/80 text-white p-4 rounded-2xl text-center text-xl font-bold">
+            {/* Instrucción */}
+
+           {/* <div className="instruction-card">
+                <Navigation size={24} />
+
+                <div>
+                    <span className="instruction-label">
+                        Instrucción Actual
+                    </span>
+
+                    <h2>{instruction}</h2>
+                </div>
+            </div> */}
+
+            {/* Guía Virtual */}
+
+            <div className="guide-assistant">
+                <img
+                    src="/guia-medica.png"
+                    alt="Guía Virtual"
+                    className="guide-image"
+                />
+
+                <div className="guide-bubble">
                     {instruction}
                 </div>
             </div>
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500 z-20">
+            {/* Flecha */}
+
+            <div className="navigation-indicator">
                 {renderArrow()}
             </div>
 
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20">
-                <div className="backdrop-blur-md bg-black/50 text-white px-6 py-3 rounded-2xl font-semibold border border-white/20 shadow-xl">
-                    📍 {location}
-                </div>
+            {/* Ruta */}
+
+            <div className="route-container">
+
+                <button
+                    className="route-toggle"
+                    onClick={() => setShowRoute(!showRoute)}
+                >
+                    🗺 Ruta ({currentStep}/4)
+                </button>
+
+                {showRoute && (
+                    <div className="route-dropdown">
+
+                        <h3>Ruta Completa</h3>
+
+                        <div
+                            className={`route-step ${currentStep >= 1 ? "active" : ""
+                                }`}
+                        >
+                            Puerta Principal
+                        </div>
+
+                        <div
+                            className={`route-step ${currentStep >= 2 ? "active" : ""
+                                }`}
+                        >
+                            Atención al Cliente
+                        </div>
+
+                        <div
+                            className={`route-step ${currentStep >= 3 ? "active" : ""
+                                }`}
+                        >
+                            Consulta Externa
+                        </div>
+
+                        <div
+                            className={`route-step ${currentStep >= 4 ? "active" : ""
+                                }`}
+                        >
+                            Laboratorio Clínico
+                        </div>
+
+                    </div>
+                )}
+
+            </div>
+
+            {/* Ubicación */}
+
+            <div className="location-card">
+                <MapPin size={20} />
+
+                <span>{location}</span>
             </div>
         </div>
     );

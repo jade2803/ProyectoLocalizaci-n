@@ -2,27 +2,58 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center gap-6">
-      <Link
-        href="/ar/imagenes"
-        className="bg-blue-600 text-white px-8 py-4 rounded-xl text-xl"
-      >
-        Ir a Imágenes
-      </Link>
+    <main className="home-container">
+      <div className="background-circle circle-1"></div>
+      <div className="background-circle circle-2"></div>
+      <div className="background-circle circle-3"></div>
 
-      <Link
-        href="/ar/consulta"
-        className="bg-green-600 text-white px-8 py-4 rounded-xl text-xl"
-      >
-        Ir a Consulta
-      </Link>
+      <div className="home-card">
+        <div className="logo-section">
+          <img
+            src="/logo-solca.png"
+            alt="SOLCA"
+            className="logo"
+          />
 
-      <Link
-        href="/ar/laboratorio"
-        className="w-72 bg-purple-600 text-white px-8 py-4 rounded-xl text-xl"
-      >
-        Ir a Laboratorio Clínico
-      </Link>
+          <h1 className="title">
+            Navegación Hospitalaria
+          </h1>
+
+          <p className="subtitle">
+            Sistema de Realidad Aumentada
+          </p>
+        </div>
+
+        <div className="buttons-container">
+          <Link href="/ar/imagenes" className="menu-button">
+            <span className="icon">🩻</span>
+            <div>
+              <h2>Área de Imágenes</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/consulta" className="menu-button">
+            <span className="icon">👨‍⚕️</span>
+            <div>
+              <h2>Consulta Externa</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/laboratorio" className="menu-button">
+            <span className="icon">🧪</span>
+            <div>
+              <h2>Laboratorio Clínico</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+        </div>
+
+        <footer className="footer-text">
+          SOLCA • Sistema Inteligente de Orientación
+        </footer>
+      </div>
     </main>
   );
 }
