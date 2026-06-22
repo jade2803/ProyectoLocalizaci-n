@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import * as tmImage from "@teachablemachine/image";
 import {
-    FaArrowUp,
-    FaArrowLeft,
-    FaCheckCircle,
-} from "react-icons/fa";
+    ArrowUp,
+    ArrowLeft,
+    CheckCircle2,
+    MapPin,
+    Navigation,
+} from "lucide-react";
 
 export default function ImagenesPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,13 +16,13 @@ export default function ImagenesPage() {
     const lastPredictions = useRef<string[]>([]);
 
     const [location, setLocation] = useState("Buscando...");
-    const [instruction, setInstruction] = useState(
-        "Apunte la cámara a una referencia"
-    );
-
+    const [instruction, setInstruction] = useState("Apunte la cámara");
     const [direction, setDirection] = useState<
         "up" | "left" | "arrived" | "none"
     >("none");
+
+    const [showRoute, setShowRoute] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -36,13 +38,15 @@ export default function ImagenesPage() {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: { ideal: "environment" },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
                 },
             });
 
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
+
+                videoRef.current.onloadedmetadata = () => {
+                    videoRef.current?.play();
+                };
             }
 
             interval = setInterval(async () => {
@@ -70,46 +74,39 @@ export default function ImagenesPage() {
                     setLocation(detected);
 
                     lastPredictions.current.push(detected);
-
                     if (lastPredictions.current.length > 3) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
                         lastPredictions.current.length === 3 &&
-                        lastPredictions.current.every(
-                            (x) => x === detected
-                        );
+                        lastPredictions.current.every((x) => x === detected);
 
                     if (!stable) return;
 
                     switch (detected) {
                         case "PuertaPrincipal":
+                            setCurrentStep(1);
                             setDirection("up");
-                            setInstruction(
-                                "Avance hacia Atención al Cliente"
-                            );
+                            setInstruction("Avance hacia Atención al Cliente");
                             break;
 
                         case "AtencionCliente":
+                            setCurrentStep(2);
                             setDirection("up");
-                            setInstruction(
-                                "Continúe recto hacia el Ascensor"
-                            );
+                            setInstruction("Continúe recto hacia el Ascensor");
                             break;
 
                         case "Ascensor":
+                            setCurrentStep(3);
                             setDirection("left");
-                            setInstruction(
-                                "Gire a la izquierda hacia Imágenes"
-                            );
+                            setInstruction("Gire a la izquierda hacia Imágenes");
                             break;
 
                         case "Imagenes":
+                            setCurrentStep(4);
                             setDirection("arrived");
-                            setInstruction(
-                                "Ha llegado al área de Imágenes"
-                            );
+                            setInstruction("Ha llegado al área de Imágenes");
                             break;
                     }
                 } finally {
@@ -131,40 +128,85 @@ export default function ImagenesPage() {
     const renderArrow = () => {
         switch (direction) {
             case "up":
-                return <FaArrowUp size={120} />;
+                return <ArrowUp size={50} strokeWidth={3} />;
             case "left":
-                return <FaArrowLeft size={120} />;
+                return <ArrowLeft size={50} strokeWidth={3} />;
             case "arrived":
-                return <FaCheckCircle size={120} />;
+                return <CheckCircle2 size={50} strokeWidth={3} />;
             default:
                 return null;
         }
     };
 
     return (
-        <div className="relative w-screen h-screen bg-black">
+        <div className="ar-container">
+
+            {/* Cámara */}
             <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 muted
-                className="w-full h-full object-cover"
+                className="camera-video"
             />
 
-            <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20 w-[90%]">
-                <div className="bg-black/80 text-white p-4 rounded-2xl text-center text-xl font-bold shadow-xl">
+            {/* Guía virtual */}
+            <div className="guide-assistant">
+                <img
+                    src="/guia-medica.png"
+                    alt="Guía Virtual"
+                    className="guide-image"
+                />
+
+                <div className="guide-bubble">
                     {instruction}
                 </div>
             </div>
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500 z-20">
+            {/* Flecha navegación */}
+            <div className="navigation-indicator">
                 {renderArrow()}
             </div>
 
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20">
-                <div className="backdrop-blur-md bg-black/50 text-white px-6 py-3 rounded-2xl font-semibold border border-white/20 shadow-xl">
-                    📍 {location}
-                </div>
+            {/* Ruta */}
+            <div className="route-container">
+
+                <button
+                    className="route-toggle"
+                    onClick={() => setShowRoute(!showRoute)}
+                >
+                    🗺 Ruta ({currentStep}/4)
+                </button>
+
+                {showRoute && (
+                    <div className="route-dropdown">
+
+                        <h3>Ruta a Imágenes</h3>
+
+                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
+                            Puerta Principal
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
+                            Atención al Cliente
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
+                            Ascensor
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                            Área de Imágenes
+                        </div>
+
+                    </div>
+                )}
+            </div>
+
+            {/* Ubicación */}
+            <div className="location-card">
+                <MapPin size={20} />
+                <span>{location}</span>
             </div>
         </div>
     );
