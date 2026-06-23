@@ -69,7 +69,7 @@ export default function NutricionPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.75) {
+                    if (best.probability < 0.6) {
                         setLocation("Buscando...");
                         return;
                     }
@@ -79,12 +79,12 @@ export default function NutricionPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 3) {
+                    if (lastPredictions.current.length > 2) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 3 &&
+                        lastPredictions.current.length === 2 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
@@ -151,7 +151,7 @@ export default function NutricionPage() {
                 } finally {
                     isPredicting.current = false;
                 }
-            }, 700);
+            }, 150);
         }
 
         init();

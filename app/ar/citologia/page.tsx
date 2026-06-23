@@ -66,7 +66,7 @@ export default function CitologiaPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.75) {
+                    if (best.probability < 0.6) {
                         setLocation("Buscando...");
                         return;
                     }
@@ -76,12 +76,12 @@ export default function CitologiaPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 3) {
+                    if (lastPredictions.current.length > 2) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 3 &&
+                        lastPredictions.current.length === 2 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
@@ -117,7 +117,7 @@ export default function CitologiaPage() {
                             setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
-                                "Continúe recto hacia el área de consulta"
+                                "Continúe recto por el pasillo"
                             );
                             break;
 
@@ -164,7 +164,7 @@ export default function CitologiaPage() {
                 } finally {
                     isPredicting.current = false;
                 }
-            }, 700);
+            }, 150);
         }
 
         init();
