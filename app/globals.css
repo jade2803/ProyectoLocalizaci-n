@@ -15,6 +15,7 @@
 body {
   background: var(--solca-bg);
   font-family: "Segoe UI", sans-serif;
+  overflow-x: hidden;
 }
 
 /* CONTENEDOR */
@@ -23,10 +24,9 @@ body {
   min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
-  overflow-y: auto; /* permitir scroll vertical */
-  padding: 0.8rem;
+  padding: 1rem;
 }
 
 /* FONDO */
@@ -71,7 +71,8 @@ body {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   border-radius: 32px;
-  padding: 3rem;
+  padding: 2rem;
+  margin: 20px 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
   z-index: 10;
 }

@@ -48,6 +48,38 @@ export default function Home() {
               <p>Iniciar navegación</p>
             </div>
           </Link>
+
+          <Link href="/ar/signos" className="menu-button">
+            <span className="icon">❤️</span>
+            <div>
+              <h2>Signos Vitales</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/nutricion" className="menu-button">
+            <span className="icon">🥗</span>
+            <div>
+              <h2>Nutrición</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/papanicolaou" className="menu-button">
+            <span className="icon">🧬</span>
+            <div>
+              <h2>Muestra Papanicolaou</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/citologia" className="menu-button">
+            <span className="icon">🔬</span>
+            <div>
+              <h2>Citología</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
         </div>
 
         <footer className="footer-text">
