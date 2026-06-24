@@ -116,19 +116,35 @@ export default function SignosPage() {
                             );
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
-                                "Continúe recto. Pasará Laboratorio Clínico"
+                                "Continúe recto por el Pasillo del Blqoue A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando hacia Laboratorio Clínico"
                             );
                             break;
 
                         case "LaboratorioClinico":
-                            setCurrentStep(5);
+                            setCurrentStep(6);
                             setDirection("up");
                             setInstruction(
-                                "Siga avanzando. Signos Vitales está más adelantey a su izquierda verá una puerta color naranja"
+                                "Continúe por el Pasillo C hacia Signos Vitales"
+                            );
+                            break;
+
+                        case "PasilloC":
+                            setCurrentStep(7);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando. Signos Vitales está más adelante, a su izquierda verá una puerta color naranja"
                             );
                             break;
 
@@ -208,7 +224,7 @@ export default function SignosPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/6)
+                    🗺 Ruta ({currentStep}/8)
                 </button>
 
                 {showRoute && (
@@ -228,14 +244,22 @@ export default function SignosPage() {
                         </div>
 
                         <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
-                            Pasillo
+                            Pasillo A
                         </div>
 
                         <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
-                            Laboratorio Clínico
+                            Pasillo B
                         </div>
 
                         <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
+                            Laboratorio Clínico
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>
+                            Pasillo C
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 8 ? "active" : ""}`}>
                             Signos Vitales
                         </div>
                     </div>

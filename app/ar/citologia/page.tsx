@@ -109,47 +109,39 @@ export default function CitologiaPage() {
                             setCurrentStep(3);
                             setDirection("right");
                             setInstruction(
-                                "Al pasar el ascensor, gire a la derecha hacia el pasillo"
+                                "Al pasar el ascensor, gire a la derecha hacia el pasillo del Bloque A"
                             );
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
-                                "Continúe recto por el pasillo"
+                                "Continúe recto por el Pasillo del Bloque A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Continúe recto por el pasillo del Bloque B hasta Laboratorio Clínico"
                             );
                             break;
 
                         case "LaboratorioClinico":
-                            setCurrentStep(5);
-                            setDirection("up");
-                            setInstruction(
-                                "Siga avanzando hacia Signos Vitales"
-                            );
-                            break;
-
-                        case "Signos":
                             setCurrentStep(6);
                             setDirection("up");
                             setInstruction(
-                                "Continúe hasta Nutrición"
+                                "Siga avanzando por el Pasillo del Blqoue C"
                             );
                             break;
 
-                        case "Nutricion":
+                        case "PasilloC":
                             setCurrentStep(7);
-                            setDirection("up");
+                            setDirection("right");
                             setInstruction(
-                                "Continúe hasta Papanicolaou"
-                            );
-                            break;
-
-                        case "Papanicolaou":
-                            setCurrentStep(8);
-                            setDirection("up");
-                            setInstruction(
-                                "Avance a la siguiente puerta negra al lado de Papanicolaou"
+                                "A su izquierda encontrará la puerta negra de Citología"
                             );
                             break;
 
@@ -227,46 +219,30 @@ export default function CitologiaPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/9)
+                    🗺 Ruta ({currentStep}/8)
                 </button>
 
                 {showRoute && (
                     <div className="route-dropdown">
                         <h3>Ruta Completa</h3>
 
-                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
-                            Puerta Principal
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
-                            Atención al Cliente
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
-                            Ascensor
-                        </div>
-
                         <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
-                            Pasillo
+                            Pasillo A
                         </div>
 
                         <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
-                            Laboratorio Clínico
+                            Pasillo B
                         </div>
 
                         <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
-                            Signos Vitales
+                            Laboratorio Clínico
                         </div>
 
                         <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>
-                            Nutrición
+                            Pasillo C
                         </div>
 
                         <div className={`route-step ${currentStep >= 8 ? "active" : ""}`}>
-                            Papanicolaou
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 9 ? "active" : ""}`}>
                             Citología
                         </div>
                     </div>

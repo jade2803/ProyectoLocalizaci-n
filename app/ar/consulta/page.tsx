@@ -106,16 +106,28 @@ export default function ConsultaPage() {
                             setInstruction("Al pasar el ascensor, gire a la derecha");
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
-                            setInstruction("Continúe recto por el pasillo. A mano derecha verá una puerta verde");
+                            setInstruction(
+                                "Continúe recto por el Pasillo del Bloque A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando. Consulta Externa está próxima a mano derecha una puerta de color Plomo"
+                            );
                             break;
 
                         case "ConsultaExterna":
-                            setCurrentStep(5);
+                            setCurrentStep(6);
                             setDirection("arrived");
-                            setInstruction("Ha llegado a Consulta Externa");
+                            setInstruction(
+                                "Ha llegado a Consulta Externa"
+                            );
                             break;
                     }
                 } finally {
@@ -184,7 +196,7 @@ export default function ConsultaPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/4)
+                    🗺 Ruta ({currentStep}/6)
                 </button>
 
                 {showRoute && (
@@ -201,10 +213,18 @@ export default function ConsultaPage() {
                         </div>
 
                         <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
-                            Pasillo Principal
+                            Ascensor
                         </div>
 
                         <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                            Pasillo A
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+                            Pasillo B
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
                             Consulta Externa
                         </div>
 

@@ -116,35 +116,35 @@ export default function PapanicolaouPage() {
                             );
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
-                                "Continúe recto por el pasillo"
+                                "Continúe recto por el Pasillo del Bloque A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando por el pasillo del Bloque B hacia Laboratorio Clínico"
                             );
                             break;
 
                         case "LaboratorioClinico":
-                            setCurrentStep(5);
-                            setDirection("up");
-                            setInstruction(
-                                "Siga avanzando hacia Signos Vitales"
-                            );
-                            break;
-
-                        case "Signos":
                             setCurrentStep(6);
                             setDirection("up");
                             setInstruction(
-                                "Continúe hasta Nutrición"
+                                "Continúe por el Pasillo del Bloque C"
                             );
                             break;
 
-                        case "Nutricion":
+                        case "PasilloC":
                             setCurrentStep(7);
                             setDirection("up");
                             setInstruction(
-                                "Continúe a la siguiente puerta después de Nutrición"
+                                "Siga avanzando a su derecha verá una puerta de color naranja que sera para la muetra de papanicolaou"
                             );
                             break;
 
@@ -228,10 +228,10 @@ export default function PapanicolaouPage() {
                         <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>Puerta Principal</div>
                         <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>Atención al Cliente</div>
                         <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>Ascensor</div>
-                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>Pasillo</div>
-                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>Laboratorio Clínico</div>
-                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>Signos Vitales</div>
-                        <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>Nutrición</div>
+                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>Pasillo A</div>
+                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>Pasillo B</div>
+                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>Laboratorio Clínico</div>
+                        <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>Pasillo C</div>
                         <div className={`route-step ${currentStep >= 8 ? "active" : ""}`}>Papanicolaou</div>
                     </div>
                 )}

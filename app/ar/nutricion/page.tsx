@@ -116,24 +116,40 @@ export default function NutricionPage() {
                             );
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
                             setInstruction(
-                                "Continúe recto. Pasará Laboratorio Clínico y más adelante verá Signos Vitales y Nutrición al lado izquierdo"
+                                "Continúe recto por el Pasillo del Bloque A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando por el Pasillo del Bloque B hacia Laboratorio Clínico"
                             );
                             break;
 
                         case "LaboratorioClinico":
-                            setCurrentStep(5);
+                            setCurrentStep(6);
                             setDirection("up");
                             setInstruction(
-                                "Siga avanzando. Nutrición está después de Signos Vitales"
+                                "Continúe por el Pasillo del Blqoue C hacia Signos Vitales"
+                            );
+                            break;
+
+                        case "PasilloC":
+                            setCurrentStep(7);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando, Signos Vitales está próximo"
                             );
                             break;
 
                         case "Signos":
-                            setCurrentStep(6);
+                            setCurrentStep(8);
                             setDirection("up");
                             setInstruction(
                                 "Continúe un poco más. Nutrición está en la puerta contigua"
@@ -141,7 +157,7 @@ export default function NutricionPage() {
                             break;
 
                         case "Nutricion":
-                            setCurrentStep(7);
+                            setCurrentStep(9);
                             setDirection("arrived");
                             setInstruction(
                                 "Ha llegado a Nutrición"
@@ -216,7 +232,7 @@ export default function NutricionPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/7)
+                    🗺 Ruta ({currentStep}/9)
                 </button>
 
                 {showRoute && (
@@ -236,18 +252,26 @@ export default function NutricionPage() {
                         </div>
 
                         <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
-                            Pasillo
+                            Pasillo A
                         </div>
 
                         <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
-                            Laboratorio Clínico
+                            Pasillo B
                         </div>
 
                         <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
-                            Signos Vitales
+                            Laboratorio Clínico
                         </div>
 
                         <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>
+                            Pasillo C
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 8 ? "active" : ""}`}>
+                            Signos Vitales
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 9 ? "active" : ""}`}>
                             Nutrición
                         </div>
                     </div>

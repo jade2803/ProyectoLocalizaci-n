@@ -108,17 +108,27 @@ export default function LaboratorioPage() {
                         case "Ascensor":
                             setCurrentStep(3);
                             setDirection("right");
-                            setInstruction("Al pasar el ascensor, gire a la derecha hacia el pasillo");
+                            setInstruction("Al pasar el ascensor, gire a la derecha hacia el pasillo del Bloque A");
                             break;
 
-                        case "Pasillo":
+                        case "PasilloA":
                             setCurrentStep(4);
                             setDirection("up");
-                            setInstruction("Continúe recto por el pasillo y a su izquierda verá la sala de espera de Laboratorio Clínico ");
+                            setInstruction(
+                                "Continúe recto por el Pasillo del Bloque A"
+                            );
+                            break;
+
+                        case "PasilloB":
+                            setCurrentStep(5);
+                            setDirection("up");
+                            setInstruction(
+                                "Siga avanzando, a su izquierda verá la sala de espera de Laboratorio Clínico"
+                            );
                             break;
 
                         case "LaboratorioClinico":
-                            setCurrentStep(5);
+                            setCurrentStep(6);
                             setDirection("arrived");
                             setInstruction("Ha llegado a Laboratorio Clínico");
                             break;
@@ -168,20 +178,6 @@ export default function LaboratorioPage() {
                 className="camera-video"
             />
 
-            {/* Instrucción */}
-
-            {/* <div className="instruction-card">
-                <Navigation size={24} />
-
-                <div>
-                    <span className="instruction-label">
-                        Instrucción Actual
-                    </span>
-
-                    <h2>{instruction}</h2>
-                </div>
-            </div> */}
-
             {/* Guía Virtual */}
 
             <div className="guide-assistant">
@@ -210,7 +206,7 @@ export default function LaboratorioPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/4)
+                    🗺 Ruta ({currentStep}/6)
                 </button>
 
                 {showRoute && (
@@ -218,31 +214,27 @@ export default function LaboratorioPage() {
 
                         <h3>Ruta Completa</h3>
 
-                        <div
-                            className={`route-step ${currentStep >= 1 ? "active" : ""
-                                }`}
-                        >
+                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
                             Puerta Principal
                         </div>
 
-                        <div
-                            className={`route-step ${currentStep >= 2 ? "active" : ""
-                                }`}
-                        >
+                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
                             Atención al Cliente
                         </div>
 
-                        <div
-                            className={`route-step ${currentStep >= 3 ? "active" : ""
-                                }`}
-                        >
-                            Consulta Externa
+                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
+                            Ascensor
                         </div>
 
-                        <div
-                            className={`route-step ${currentStep >= 4 ? "active" : ""
-                                }`}
-                        >
+                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                            Pasillo A
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+                            Pasillo B
+                        </div>
+
+                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
                             Laboratorio Clínico
                         </div>
 
