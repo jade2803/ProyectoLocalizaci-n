@@ -136,7 +136,7 @@ export default function SignosPage() {
                             setCurrentStep(6);
                             setDirection("up");
                             setInstruction(
-                                "Continúe por el Pasillo C hacia Signos Vitales"
+                                "Continúe por el Pasillo del Bloque C hacia Signos Vitales"
                             );
                             break;
 
