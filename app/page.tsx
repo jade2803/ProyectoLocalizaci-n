@@ -36,7 +36,7 @@ export default function Home() {
           <Link href="/ar/consulta" className="menu-button">
             <span className="icon">👨‍⚕️</span>
             <div>
-              <h2>Consulta Externa</h2>
+              <h2>Consulta Externa 1-15</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
@@ -93,6 +93,14 @@ export default function Home() {
             <span className="icon">💵</span>
             <div>
               <h2>Cajas</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/consulta18" className="menu-button">
+            <span className="icon">🚪</span>
+            <div>
+              <h2>Consulta Externa 18–21</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
