@@ -143,7 +143,7 @@ export default function ConsultaExternaPage() {
                             );
                             break;
 
-                        case "ConsultaExterna":
+                        case "Consulta":
                             setCurrentStep(8);
                             setDirection("arrived");
                             setInstruction(
