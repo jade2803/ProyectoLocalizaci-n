@@ -106,6 +106,14 @@ export default function Home() {
           </Link>
         </div>
 
+        <Link href="/ar/rehabilitacion" className="menu-button">
+          <span className="icon">🦾</span>
+          <div>
+            <h2>Rehabilitación</h2>
+            <p>Iniciar navegación</p>
+          </div>
+        </Link>
+
         <footer className="footer-text">
           SOLCA • Sistema Inteligente de Orientación
         </footer>
