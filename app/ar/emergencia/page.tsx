@@ -128,7 +128,7 @@ export default function EmergenciaPage() {
                             setCurrentStep(5);
                             setDirection("right");
                             setInstruction(
-                                "Gire a la derecha y continúe por el Pasillo D."
+                                "Gire a la derecha y continúe por el Pasillo"
                             );
                             break;
 

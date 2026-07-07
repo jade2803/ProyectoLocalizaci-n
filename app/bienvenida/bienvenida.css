@@ -1,0 +1,253 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.welcome-container{
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    position:relative;
+
+    background:linear-gradient(
+        135deg,
+        #0b6cb8,
+        #1e88e5,
+        #81d4fa
+    );
+}
+
+.circle{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.15);
+
+    animation:float 10s infinite ease-in-out;
+}
+
+.circle1{
+
+    width:250px;
+    height:250px;
+
+    left:-80px;
+    top:-50px;
+}
+
+.circle2{
+
+    width:350px;
+    height:350px;
+
+    right:-120px;
+    bottom:-100px;
+
+    animation-delay:2s;
+}
+
+.circle3{
+
+    width:150px;
+    height:150px;
+
+    right:25%;
+    top:15%;
+
+    animation-delay:4s;
+}
+
+.welcome-card{
+
+    width:500px;
+    max-width:90%;
+
+    background:white;
+
+    border-radius:30px;
+
+    padding:40px;
+
+    text-align:center;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+
+    animation:zoom 1s;
+}
+
+.welcome-logo{
+
+    width:140px;
+
+    margin-bottom:20px;
+}
+
+.doctor{
+
+    width:220px;
+
+    margin:auto;
+
+    display:block;
+
+    animation:floatDoctor 3s infinite;
+}
+
+.typing{
+
+    margin-top:25px;
+
+    color:#0b4b7d;
+
+    font-size:34px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    border-right:4px solid #0b6cb8;
+
+    width:0;
+
+    animation:
+        typing 4s steps(40,end) forwards,
+        blink .7s infinite;
+}
+
+.fade{
+
+    margin-top:25px;
+
+    color:#555;
+
+    font-size:18px;
+
+    line-height:1.7;
+
+    opacity:0;
+
+    animation:fade 2s forwards;
+
+    animation-delay:4s;
+}
+
+.start-button{
+
+    display:inline-block;
+
+    margin-top:40px;
+
+    padding:16px 40px;
+
+    background:#0b84d8;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:50px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+    opacity:0;
+
+    animation:fade 2s forwards;
+
+    animation-delay:5s;
+}
+
+.start-button:hover{
+
+    background:#086ab0;
+
+    transform:scale(1.08);
+}
+
+@keyframes typing{
+
+    from{
+        width:0;
+    }
+
+    to{
+        width:100%;
+    }
+
+}
+
+@keyframes blink{
+
+    50%{
+        border-color:transparent;
+    }
+
+}
+
+@keyframes fade{
+
+    from{
+
+        opacity:0;
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes zoom{
+
+    from{
+
+        transform:scale(.7);
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+        opacity:1;
+
+    }
+
+}
+
+@keyframes floatDoctor{
+
+    50%{
+
+        transform:translateY(-12px);
+
+    }
+
+}
+
+@keyframes float{
+
+    50%{
+
+        transform:translateY(-40px);
+
+    }
+
+}
