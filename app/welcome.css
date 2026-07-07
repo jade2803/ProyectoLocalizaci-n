@@ -134,17 +134,21 @@
 
 }
 
-.typing-title {
+.typing-title{
 
-    font-size: 30px;
-    color: #0d4f7c;
-    margin-bottom: 20px;
+    font-size:30px;
 
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #0d6efd;
+    color:#0d4f7c;
 
-    width: 0;
+    margin-bottom:20px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    border-right:3px solid #0d6efd;
+
+    width:0;
 
     animation:
         typing 3.5s steps(40,end) forwards,
@@ -292,62 +296,48 @@
 
 }
 
+@keyframes typingMobile{
+
+    from{
+
+        width:0;
+
+    }
+
+    to{
+
+        width:95%;
+
+    }
+
+}
+
 /* ========================= */
 /* RESPONSIVE PARA CELULARES */
 /* ========================= */
 
-@media (max-width: 768px) {
+@media (max-width:768px){
 
     .welcome-card{
+
         width:95%;
         padding:30px 20px;
-    }
 
-    .welcome-logo{
-        width:110px;
     }
 
     .doctor-image{
+
         width:180px;
+
     }
 
     .typing-title{
 
-        font-size:32px;
+        font-size:22px;
 
-        /* Quitamos el efecto máquina de escribir */
-        white-space: normal;
-        overflow: visible;
-
-        width:100%;
-
-        border-right:none;
-
-        animation:fadeIn 1.5s forwards;
-
-        line-height:1.25;
-
-    }
-
-    .description{
-
-        font-size:18px;
-        line-height:1.7;
-
-    }
-
-    .speech-bubble{
-
-        font-size:18px;
-
-    }
-
-    .start-button{
-
-        width:100%;
-        padding:16px;
-
-        font-size:20px;
+        animation:
+            typingMobile 4s steps(40,end) forwards,
+            blink .8s infinite;
 
     }
 

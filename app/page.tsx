@@ -31,7 +31,8 @@ export default function Home() {
                 </div>
 
                 <h1 className="typing-title">
-                    Guía Inteligente de Navegación Hospitalaria
+                    Guía Inteligente de<br />
+                    Navegación Hospitalaria
                 </h1>
 
                 <p className="description">
