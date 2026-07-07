@@ -1,147 +1,51 @@
+"use client";
+
 import Link from "next/link";
+import "./welcome.css";
 
 export default function Home() {
-  return (
-    <main className="home-container">
-      <div className="background-circle circle-1"></div>
-      <div className="background-circle circle-2"></div>
-      <div className="background-circle circle-3"></div>
+    return (
+        <main className="welcome-container">
 
-      <div className="home-card">
-        <div className="logo-section">
-          <img
-            src="/logo-solca.png"
-            alt="SOLCA"
-            className="logo"
-          />
+            {/* Círculos de fondo */}
+            <div className="circle circle-1"></div>
+            <div className="circle circle-2"></div>
+            <div className="circle circle-3"></div>
 
-          <h1 className="title">
-            Navegación Hospitalaria
-          </h1>
+            <div className="welcome-card">
 
-          <p className="subtitle">
-            Sistema de Realidad Aumentada
-          </p>
-        </div>
+                <img
+                    src="/logo-solca.png"
+                    alt="SOLCA"
+                    className="welcome-logo"
+                />
 
-        <div className="buttons-container">
-          <Link href="/ar/imagenes" className="menu-button">
-            <span className="icon">🩻</span>
-            <div>
-              <h2>Área de Imágenes</h2>
-              <p>Iniciar navegación</p>
+                <img
+                    src="/guia-medica.png"
+                    alt="Guía Virtual"
+                    className="doctor-image"
+                />
+
+                <div className="speech-bubble">
+                    ¡Hola! 👋 Bienvenido a SOLCA
+                </div>
+
+                <h1 className="typing-title">
+                    Guía Inteligente de Navegación Hospitalaria
+                </h1>
+
+                <p className="description">
+                    Mediante Realidad Aumentada podrá localizar fácilmente
+                    consultorios, laboratorios, farmacia, imágenes y demás
+                    servicios del hospital.
+                </p>
+
+                <Link href="/menu" className="start-button">
+                    Comenzar recorrido →
+                </Link>
+
             </div>
-          </Link>
 
-          <Link href="/ar/consulta" className="menu-button">
-            <span className="icon">👨‍⚕️</span>
-            <div>
-              <h2>Consulta Externa 1-15</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/laboratorio" className="menu-button">
-            <span className="icon">🧪</span>
-            <div>
-              <h2>Laboratorio Clínico</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/signos" className="menu-button">
-            <span className="icon">❤️</span>
-            <div>
-              <h2>Signos Vitales</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/nutricion" className="menu-button">
-            <span className="icon">🥗</span>
-            <div>
-              <h2>Nutrición</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/papanicolaou" className="menu-button">
-            <span className="icon">🧬</span>
-            <div>
-              <h2>Muestra Papanicolaou</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/citologia" className="menu-button">
-            <span className="icon">🔬</span>
-            <div>
-              <h2>Citología</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/farmacia" className="menu-button">
-            <span className="icon">💊</span>
-            <div>
-              <h2>Farmacia</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/cajas" className="menu-button">
-            <span className="icon">💵</span>
-            <div>
-              <h2>Cajas</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/consulta18" className="menu-button">
-            <span className="icon">🚪</span>
-            <div>
-              <h2>Consulta Externa 18–21</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/rehabilitacion" className="menu-button">
-            <span className="icon">🦾</span>
-            <div>
-              <h2>Rehabilitación</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/psicologia" className="menu-button">
-            <span className="icon">🧠</span>
-            <div>
-              <h2>Psicología</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/quimioterapia" className="menu-button">
-            <span className="icon">💉</span>
-            <div>
-              <h2>Quimioterapia</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/emergencia" className="menu-button">
-            <span className="icon">🚑</span>
-            <div>
-              <h2>Emergencia</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-        </div>
-
-        <footer className="footer-text">
-          SOLCA • Sistema Inteligente de Orientación
-        </footer>
-      </div>
-    </main>
-  );
+        </main>
+    );
 }
