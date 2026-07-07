@@ -104,15 +104,39 @@ export default function Home() {
               <p>Iniciar navegación</p>
             </div>
           </Link>
-        </div>
 
-        <Link href="/ar/rehabilitacion" className="menu-button">
-          <span className="icon">🦾</span>
-          <div>
-            <h2>Rehabilitación</h2>
-            <p>Iniciar navegación</p>
-          </div>
-        </Link>
+          <Link href="/ar/rehabilitacion" className="menu-button">
+            <span className="icon">🦾</span>
+            <div>
+              <h2>Rehabilitación</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/psicologia" className="menu-button">
+            <span className="icon">🧠</span>
+            <div>
+              <h2>Psicología</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/quimioterapia" className="menu-button">
+            <span className="icon">💉</span>
+            <div>
+              <h2>Quimioterapia</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/emergencia" className="menu-button">
+            <span className="icon">🚑</span>
+            <div>
+              <h2>Emergencia</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+        </div>
 
         <footer className="footer-text">
           SOLCA • Sistema Inteligente de Orientación
