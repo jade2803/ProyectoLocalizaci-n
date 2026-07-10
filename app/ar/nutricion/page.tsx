@@ -144,7 +144,7 @@ export default function NutricionPage() {
                             setCurrentStep(7);
                             setDirection("up");
                             setInstruction(
-                                "Siga avanzando, Signos Vitales está próximo"
+                                "Siga avanzando, Signos Vitales está próximo a lu lado izquierdo"
                             );
                             break;
 
