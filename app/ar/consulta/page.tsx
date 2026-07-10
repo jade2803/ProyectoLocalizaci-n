@@ -116,7 +116,7 @@ export default function ConsultaPage() {
 
                         case "PasilloB":
                             setCurrentStep(5);
-                            setDirection("up");
+                            setDirection("right");
                             setInstruction(
                                 "Siga avanzando. Consulta Externa está próxima a mano derecha una puerta de color Plomo"
                             );

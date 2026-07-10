@@ -144,7 +144,7 @@ export default function SignosPage() {
                             setCurrentStep(7);
                             setDirection("up");
                             setInstruction(
-                                "Siga avanzando. Signos Vitales está más adelante, a su izquierda verá una puerta color naranja"
+                                "Siga avanzando. Signos Vitales está más adelante, a su izquierda verá una puerta de color plomo"
                             );
                             break;
 

@@ -13,11 +13,11 @@
     justify-content:center;
     align-items:center;
 
-    padding:40px 15px;
-
-    overflow-x:hidden;
+    padding:20px 15px;
 
     position:relative;
+
+    overflow:hidden;
 
     background:linear-gradient(
         135deg,

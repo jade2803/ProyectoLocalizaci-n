@@ -41,7 +41,7 @@ export default function Home() {
                     servicios del hospital.
                 </p>
 
-                <Link href="/menu" className="start-button">
+                <Link href="/pisos" className="start-button">
                     Comenzar recorrido →
                 </Link>
 

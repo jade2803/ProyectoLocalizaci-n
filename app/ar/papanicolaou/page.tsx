@@ -144,7 +144,7 @@ export default function PapanicolaouPage() {
                             setCurrentStep(7);
                             setDirection("up");
                             setInstruction(
-                                "Siga avanzando a su derecha verá una puerta de color naranja que sera para la muetra de papanicolaou"
+                                "Siga avanzando a su izquierda verá una puerta de color naranja que sera para la muetra de papanicolaou"
                             );
                             break;
 

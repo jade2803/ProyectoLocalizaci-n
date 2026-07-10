@@ -461,3 +461,42 @@ body {
 
     box-shadow: 0 6px 15px rgba(0,0,0,.15);
 }
+
+/* ========================= */
+/* BOTONES PANTALLA DE PISOS */
+/* ========================= */
+
+.piso-button {
+    justify-content: flex-start;
+    gap: 1.4rem;
+    padding: 1.5rem 2rem;
+}
+
+.piso-button .icon {
+    flex-shrink: 0;
+    width: 55px;
+    font-size: 2.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.piso-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.piso-content h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--solca-blue);
+}
+
+.piso-content p {
+    margin-top: 4px;
+    font-size: 0.95rem;
+    color: #64748b;
+}

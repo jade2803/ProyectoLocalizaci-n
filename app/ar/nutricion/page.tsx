@@ -152,7 +152,7 @@ export default function NutricionPage() {
                             setCurrentStep(8);
                             setDirection("up");
                             setInstruction(
-                                "Continúe un poco más. Nutrición está en la puerta contigua"
+                                "Continúe un poco más.A su izquierda vera la puerta de Nutrición"
                             );
                             break;
 
