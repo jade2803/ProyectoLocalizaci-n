@@ -2,241 +2,622 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as tmImage from "@teachablemachine/image";
+
 import {
     ArrowUp,
     ArrowRight,
+    ArrowLeft,
     CheckCircle2,
     MapPin,
 } from "lucide-react";
 
-export default function ConsultaPage() {
+
+export default function ProcedimientosPage() {
+
+
     const videoRef = useRef<HTMLVideoElement>(null);
+
     const isPredicting = useRef(false);
+
     const lastPredictions = useRef<string[]>([]);
 
+
+
     const [location, setLocation] = useState("Buscando...");
-    const [instruction, setInstruction] = useState("Apunte la cámara");
+
+    const [instruction, setInstruction] = useState(
+        "Apunte la cámara"
+    );
+
 
     const [direction, setDirection] = useState<
-        "up" | "right" | "arrived" | "none"
+        "up" | "right" | "left" | "arrived" | "none"
     >("none");
 
+
+
     const [showRoute, setShowRoute] = useState(false);
+
     const [currentStep, setCurrentStep] = useState(1);
 
+
+
     useEffect(() => {
+
+
         let interval: NodeJS.Timeout;
+
         let stream: MediaStream;
+
         let model: any;
 
+
+
         async function init() {
+
+
             model = await tmImage.load(
                 "/model/model.json",
                 "/model/metadata.json"
             );
 
+
+
             stream = await navigator.mediaDevices.getUserMedia({
+
                 video: {
-                    facingMode: { ideal: "environment" },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
+
+                    facingMode: {
+                        ideal: "environment"
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    },
+
                 },
+
             });
 
+
+
             if (videoRef.current) {
+
                 videoRef.current.srcObject = stream;
 
+
                 videoRef.current.onloadedmetadata = () => {
+
                     videoRef.current?.play();
+
                 };
+
             }
 
+
+
+
             interval = setInterval(async () => {
-                if (!videoRef.current) return;
-                if (isPredicting.current) return;
+
+
+                if (!videoRef.current)
+                    return;
+
+
+
+                if (isPredicting.current)
+                    return;
+
+
 
                 isPredicting.current = true;
 
+
+
                 try {
-                    const predictions = await model.predict(videoRef.current);
+
+
+                    const predictions =
+                        await model.predict(videoRef.current);
+
+
 
                     predictions.sort(
                         (a: any, b: any) =>
                             b.probability - a.probability
                     );
 
+
+
                     const best = predictions[0];
 
+
+
                     if (best.probability < 0.6) {
+
                         setLocation("Buscando...");
+
                         return;
+
                     }
+
+
 
                     const detected = best.className;
+
+
+
                     setLocation(detected);
 
-                    lastPredictions.current.push(detected);
+
+
+                    lastPredictions.current.push(
+                        detected
+                    );
+
+
 
                     if (lastPredictions.current.length > 2) {
+
                         lastPredictions.current.shift();
+
                     }
+
+
 
                     const stable =
                         lastPredictions.current.length === 2 &&
-                        lastPredictions.current.every((x) => x === detected);
+                        lastPredictions.current.every(
+                            (x) => x === detected
+                        );
 
-                    if (!stable) return;
+
+
+                    if (!stable)
+                        return;
+
+
+
 
                     switch (detected) {
+
+
+
                         case "PuertaPrincipal":
+
+
                             setCurrentStep(1);
+
                             setDirection("up");
-                            setInstruction("Avance hacia Atención al Cliente");
+
+
+                            setInstruction(
+                                "Avance hacia Atención al Cliente"
+                            );
+
+
                             break;
+
+
+
+
 
                         case "AtencionCliente":
+
+
                             setCurrentStep(2);
+
+
                             setDirection("up");
-                            setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
+
+
+                            setInstruction(
+                                "Continúe recto por el camino entre las gradas y el ascensor"
+                            );
+
+
                             break;
+
+
+
+
 
                         case "Ascensor":
+
+
                             setCurrentStep(3);
+
+
                             setDirection("right");
-                            setInstruction("Al pasar el ascensor, gire a la derecha");
+
+
+                            setInstruction(
+                                "Al pasar el ascensor gire a la derecha"
+                            );
+
+
                             break;
 
+
+
+
+
                         case "PasilloA":
+
+
                             setCurrentStep(4);
+
+
                             setDirection("up");
+
+
                             setInstruction(
                                 "Continúe recto por el Pasillo del Bloque A"
                             );
+
+
                             break;
+
+
+
+
 
                         case "PasilloB":
+
+
                             setCurrentStep(5);
-                            setDirection("right");
+
+
+                            setDirection("left");
+
+
                             setInstruction(
-                                "Siga avanzando. Consulta Externa está próxima a mano derecha una puerta de color Plomo"
+                                "Continúe hasta el final del pasillo y gire a la izquierda hacia Procedimientos"
                             );
+
+
                             break;
 
-                        case "ConsultaExterna":
+
+
+
+
+                        case "Procedimientos":
+
+
                             setCurrentStep(6);
+
+
                             setDirection("arrived");
+
+
                             setInstruction(
-                                "Ha llegado a Signos Vitales Consulta 1-15"
+                                "Ha llegado al área de Procedimientos"
                             );
+
+
                             break;
+
+
+
                     }
-                } finally {
-                    isPredicting.current = false;
+
+
+
+
                 }
+                finally {
+
+                    isPredicting.current = false;
+
+                }
+
+
+
             }, 150);
+
+
+
+
         }
+
+
 
         init();
 
+
+
+
         return () => {
-            if (interval) clearInterval(interval);
+
+
+            if (interval)
+                clearInterval(interval);
+
+
+
             if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
+
+                stream
+                    .getTracks()
+                    .forEach(
+                        track => track.stop()
+                    );
+
             }
+
+
         };
+
+
+
     }, []);
 
+
+
+
+
+
     const renderArrow = () => {
+
+
         switch (direction) {
+
+
             case "up":
-                return <ArrowUp size={50} strokeWidth={3} />;
+
+                return (
+                    <ArrowUp
+                        size={50}
+                        strokeWidth={3}
+                    />
+                );
+
+
+
             case "right":
-                return <ArrowRight size={50} strokeWidth={3} />;
+
+                return (
+                    <ArrowRight
+                        size={50}
+                        strokeWidth={3}
+                    />
+                );
+
+
+
+            case "left":
+
+                return (
+                    <ArrowLeft
+                        size={50}
+                        strokeWidth={3}
+                    />
+                );
+
+
+
             case "arrived":
-                return <CheckCircle2 size={50} strokeWidth={3} />;
+
+                return (
+                    <CheckCircle2
+                        size={50}
+                        strokeWidth={3}
+                    />
+                );
+
+
+
             default:
+
                 return null;
+
         }
+
+
     };
 
+
+
+
+
     return (
+
         <div className="ar-container">
 
-            {/* Cámara */}
+
             <video
+
                 ref={videoRef}
+
                 autoPlay
+
                 playsInline
+
                 muted
+
                 className="camera-video"
+
             />
 
-            {/* Guía virtual */}
+
+
+
             <div className="guide-assistant">
+
+
                 <img
+
                     src="/guia-medica.png"
+
                     alt="Guía Virtual"
+
                     className="guide-image"
+
                 />
 
+
+
                 <div className="guide-bubble">
+
                     {instruction}
+
                 </div>
+
+
             </div>
 
-            {/* Flecha navegación */}
+
+
+
+
+
             <div className="navigation-indicator">
+
                 {renderArrow()}
+
             </div>
 
-            {/* Ruta */}
+
+
+
+
+
+
             <div className="route-container">
 
+
                 <button
+
                     className="route-toggle"
-                    onClick={() => setShowRoute(!showRoute)}
+
+                    onClick={() =>
+                        setShowRoute(!showRoute)
+                    }
+
                 >
+
                     🗺 Ruta ({currentStep}/6)
+
+
                 </button>
 
-                {showRoute && (
-                    <div className="route-dropdown">
 
-                        <h3>Ruta a Consulta Externa</h3>
 
-                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
-                            Puerta Principal
+
+
+
+                {
+                    showRoute && (
+
+
+                        <div className="route-dropdown">
+
+
+                            <h3>
+                                Ruta a Procedimientos
+                            </h3>
+
+
+
+                            <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
+
+                                Puerta Principal
+
+                            </div>
+
+
+
+
+                            <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
+
+                                Atención al Cliente
+
+                            </div>
+
+
+
+
+
+                            <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
+
+                                Ascensor
+
+                            </div>
+
+
+
+
+
+                            <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+
+                                Pasillo A
+
+                            </div>
+
+
+
+
+
+                            <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+
+                                Pasillo B
+
+                            </div>
+
+
+
+
+
+                            <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
+
+                                Procedimientos
+
+                            </div>
+
+
+
                         </div>
 
-                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
-                            Atención al Cliente
-                        </div>
 
-                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
-                            Ascensor
-                        </div>
+                    )
+                }
 
-                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
-                            Pasillo A
-                        </div>
 
-                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
-                            Pasillo B
-                        </div>
 
-                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
-                            Consulta Externa
-                        </div>
-
-                    </div>
-                )}
             </div>
 
-            {/* Ubicación */}
+
+
+
+
+
+
             <div className="location-card">
+
+
                 <MapPin size={20} />
-                <span>{location}</span>
+
+
+                <span>
+
+                    {location}
+
+                </span>
+
+
             </div>
+
+
+
+
         </div>
+
+
     );
+
 }

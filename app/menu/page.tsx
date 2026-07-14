@@ -36,7 +36,7 @@ export default function Home() {
           <Link href="/ar/consulta" className="menu-button">
             <span className="icon">👨‍⚕️</span>
             <div>
-              <h2>Consulta Externa 1-15</h2>
+              <h2>Signos Vitales 1</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
@@ -52,7 +52,7 @@ export default function Home() {
           <Link href="/ar/signos" className="menu-button">
             <span className="icon">❤️</span>
             <div>
-              <h2>Signos Vitales</h2>
+              <h2>Signos Vitales 2</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
@@ -133,6 +133,30 @@ export default function Home() {
             <span className="icon">🚑</span>
             <div>
               <h2>Emergencia</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/procedimientos" className="menu-button">
+            <span className="icon">🩺</span>
+            <div>
+              <h2>Procedimientos</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/uci" className="menu-button">
+            <span className="icon">🏥</span>
+            <div>
+              <h2>UCI - Cuidados Intensivos</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/consulta9-16" className="menu-button">
+            <span className="icon">🚪</span>
+            <div>
+              <h2>Consulta Externa 9 - 16</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
