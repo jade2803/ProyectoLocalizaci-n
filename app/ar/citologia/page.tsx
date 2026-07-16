@@ -13,6 +13,7 @@ export default function CitologiaPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const isPredicting = useRef(false);
     const lastPredictions = useRef<string[]>([]);
+    const lastChange = useRef(0);
 
     const [location, setLocation] = useState("Buscando...");
     const [instruction, setInstruction] = useState("Apunte la cámara");
@@ -22,7 +23,9 @@ export default function CitologiaPage() {
     >("none");
 
     const [showRoute, setShowRoute] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStepUI, setCurrentStepUI] = useState(1);
+
+    const currentStep = useRef(1);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -76,82 +79,115 @@ export default function CitologiaPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 2) {
+                    if (lastPredictions.current.length > 3) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
+                        lastPredictions.current.length === 3 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
 
                     if (!stable) return;
 
-                    switch (detected) {
-                        case "PuertaPrincipal":
-                            setCurrentStep(1);
-                            setDirection("up");
-                            setInstruction(
-                                "Avance hacia Atención al Cliente"
-                            );
-                            break;
+                    const now = Date.now();
 
-                        case "AtencionCliente":
-                            setCurrentStep(2);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto por el camino entre las gradas y el ascensor"
-                            );
-                            break;
+                    if (now - lastChange.current < 2000) {
+                        return;
+                    }
 
-                        case "Ascensor":
-                            setCurrentStep(3);
-                            setDirection("right");
-                            setInstruction(
-                                "Al pasar el ascensor, gire a la derecha hacia el pasillo del Bloque A"
-                            );
-                            break;
+                    if (currentStep.current === 1 && detected === "PuertaPrincipal") {
 
-                        case "PasilloA":
-                            setCurrentStep(4);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto por el Pasillo del Bloque A"
-                            );
-                            break;
+                        lastChange.current = now;
 
-                        case "PasilloB":
-                            setCurrentStep(5);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto por el pasillo del Bloque B hasta Laboratorio Clínico"
-                            );
-                            break;
+                        currentStep.current = 2;
+                        setCurrentStepUI(2);
 
-                        case "LaboratorioClinico":
-                            setCurrentStep(6);
-                            setDirection("up");
-                            setInstruction(
-                                "Siga avanzando por el Pasillo del Blqoue C"
-                            );
-                            break;
+                        setDirection("up");
+                        setInstruction("Avance hacia Atención al Cliente");
 
-                        case "PasilloC":
-                            setCurrentStep(7);
-                            setDirection("right");
-                            setInstruction(
-                                "A su izquierda encontrará la puerta negra de Citología"
-                            );
-                            break;
+                    }
 
-                        case "Citologia":
-                            setCurrentStep(9);
-                            setDirection("arrived");
-                            setInstruction(
-                                "Ha llegado a Citología"
-                            );
-                            break;
+                    else if (currentStep.current === 2 && detected === "AtencionCliente") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 3;
+                        setCurrentStepUI(3);
+
+                        setDirection("up");
+                        setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
+
+                    }
+
+                    else if (currentStep.current === 3 && detected === "Ascensor") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 4;
+                        setCurrentStepUI(4);
+
+                        setDirection("right");
+                        setInstruction("Al pasar el ascensor, gire a la derecha hacia el Pasillo A");
+
+                    }
+
+                    else if (currentStep.current === 4 && detected === "PasilloA") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 5;
+                        setCurrentStepUI(5);
+
+                        setDirection("up");
+                        setInstruction("Continúe recto por el Pasillo A");
+
+                    }
+
+                    else if (currentStep.current === 5 && detected === "PasilloB") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 6;
+                        setCurrentStepUI(6);
+
+                        setDirection("up");
+                        setInstruction("Continúe hasta Laboratorio Clínico");
+
+                    }
+
+                    else if (currentStep.current === 6 && detected === "LaboratorioClinico") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 7;
+                        setCurrentStepUI(7);
+
+                        setDirection("up");
+                        setInstruction("Siga avanzando por el Pasillo C");
+
+                    }
+
+                    else if (currentStep.current === 7 && detected === "PasilloC") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 8;
+                        setCurrentStepUI(8);
+
+                        setDirection("right");
+                        setInstruction("A su izquierda encontrará la puerta de Citología");
+
+                    }
+
+                    else if (currentStep.current === 8 && detected === "Citologia") {
+
+                        lastChange.current = now;
+
+                        setDirection("arrived");
+                        setInstruction("Ha llegado a Citología");
+
                     }
                 } finally {
                     isPredicting.current = false;
@@ -219,30 +255,30 @@ export default function CitologiaPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/8)
+                    🗺 Ruta ({currentStepUI}/8)
                 </button>
 
                 {showRoute && (
                     <div className="route-dropdown">
                         <h3>Ruta Completa</h3>
 
-                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 4 ? "active" : ""}`}>
                             Pasillo A
                         </div>
 
-                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 5 ? "active" : ""}`}>
                             Pasillo B
                         </div>
 
-                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 6 ? "active" : ""}`}>
                             Laboratorio Clínico
                         </div>
 
-                        <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 7 ? "active" : ""}`}>
                             Pasillo C
                         </div>
 
-                        <div className={`route-step ${currentStep >= 8 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 8 ? "active" : ""}`}>
                             Citología
                         </div>
                     </div>

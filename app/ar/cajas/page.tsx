@@ -13,6 +13,7 @@ export default function CajasPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const isPredicting = useRef(false);
     const lastPredictions = useRef<string[]>([]);
+    const lastChange = useRef(0);
 
     const [location, setLocation] = useState("Buscando...");
     const [instruction, setInstruction] = useState("Apunte la cámara");
@@ -21,7 +22,9 @@ export default function CajasPage() {
     >("none");
 
     const [showRoute, setShowRoute] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStepUI, setCurrentStepUI] = useState(1);
+
+    const currentStep = useRef(1);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -64,55 +67,97 @@ export default function CajasPage() {
                     const best = predictions[0];
 
                     if (best.probability < 0.6) {
-                        setLocation("Buscando...");
                         return;
                     }
 
                     const detected = best.className;
+
                     setLocation(detected);
 
+                    // ---------- Estabilidad ----------
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 2) {
+                    if (lastPredictions.current.length > 3) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
+                        lastPredictions.current.length === 3 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
 
                     if (!stable) return;
 
-                    switch (detected) {
-                        case "PuertaPrincipal":
-                            setCurrentStep(1);
+                    // ---------- Espera entre cambios ----------
+                    const now = Date.now();
+
+                    if (now - lastChange.current < 2000) {
+                        return;
+                    }
+
+                    // ---------- Máquina de estados ----------
+
+                    if (currentStep.current === 1) {
+
+                        if (detected === "PuertaPrincipal") {
+
+                            lastChange.current = now;
+
+                            currentStep.current = 2;
+                            setCurrentStepUI(2);
+
                             setDirection("up");
+
                             setInstruction(
                                 "Avance hacia Atención al Cliente"
                             );
-                            break;
 
-                        case "AtencionCliente":
-                            setCurrentStep(2);
+                        }
+
+                    }
+
+                    else if (currentStep.current === 2) {
+
+                        if (detected === "AtencionCliente") {
+
+                            lastChange.current = now;
+
+                            currentStep.current = 3;
+                            setCurrentStepUI(3);
+
                             setDirection("left");
+
                             setInstruction(
                                 "Gire a la izquierda hacia Cajas"
                             );
-                            break;
 
-                        case "Cajas":
-                            setCurrentStep(3);
+                        }
+
+                    }
+
+                    else if (currentStep.current === 3) {
+
+                        if (detected === "Cajas") {
+
+                            lastChange.current = now;
+
                             setDirection("arrived");
+
                             setInstruction(
                                 "Ha llegado al área de Cajas"
                             );
-                            break;
+
+                        }
+
                     }
+
                 } finally {
+
                     isPredicting.current = false;
+
                 }
+
             }, 150);
         }
 
@@ -175,22 +220,22 @@ export default function CajasPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/3)
+                    🗺 Ruta ({currentStepUI}/3)
                 </button>
 
                 {showRoute && (
                     <div className="route-dropdown">
                         <h3>Ruta a Cajas</h3>
 
-                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 1 ? "active" : ""}`}>
                             Puerta Principal
                         </div>
 
-                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 2 ? "active" : ""}`}>
                             Atención al Cliente
                         </div>
 
-                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 3 ? "active" : ""}`}>
                             Cajas
                         </div>
                     </div>
