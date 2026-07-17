@@ -11,11 +11,19 @@ import {
 } from "lucide-react";
 
 export default function EmergenciaPage() {
+
     const videoRef = useRef<HTMLVideoElement>(null);
+
     const isPredicting = useRef(false);
+
     const lastPredictions = useRef<string[]>([]);
 
+    const lastChange = useRef(0);
+
+    const currentStep = useRef(1);
+
     const [location, setLocation] = useState("Buscando...");
+
     const [instruction, setInstruction] = useState("Apunte la cámara");
 
     const [direction, setDirection] = useState<
@@ -23,14 +31,17 @@ export default function EmergenciaPage() {
     >("none");
 
     const [showRoute, setShowRoute] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+
+    const [currentStepUI, setCurrentStepUI] = useState(1);
 
     useEffect(() => {
+
         let interval: NodeJS.Timeout;
         let stream: MediaStream;
         let model: any;
 
         async function init() {
+
             model = await tmImage.load(
                 "/model/model.json",
                 "/model/metadata.json"
@@ -38,21 +49,26 @@ export default function EmergenciaPage() {
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    facingMode: { ideal: "environment" },
+                    facingMode: {
+                        ideal: "environment",
+                    },
                 },
             });
 
             if (videoRef.current) {
+
                 videoRef.current.srcObject = stream;
 
                 videoRef.current.onloadedmetadata = () => {
                     videoRef.current?.play();
                 };
+
             }
 
             interval = setInterval(async () => {
 
                 if (!videoRef.current) return;
+
                 if (isPredicting.current) return;
 
                 isPredicting.current = true;
@@ -69,88 +85,175 @@ export default function EmergenciaPage() {
                     const best = predictions[0];
 
                     if (best.probability < 0.6) {
+
                         setLocation("Buscando...");
                         return;
+
                     }
 
                     const detected = best.className;
+
                     setLocation(detected);
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 2) {
+                    if (lastPredictions.current.length > 3) {
+
                         lastPredictions.current.shift();
+
                     }
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
+                        lastPredictions.current.length === 3 &&
                         lastPredictions.current.every(
-                            x => x === detected
+                            (x) => x === detected
                         );
 
                     if (!stable) return;
 
-                    switch (detected) {
+                    const now = Date.now();
 
-                        case "PuertaPrincipal":
-                            setCurrentStep(1);
-                            setDirection("up");
-                            setInstruction(
-                                "Avance hacia Atención al Cliente."
-                            );
-                            break;
+                    if (now - lastChange.current < 2000) {
 
-                        case "AtencionCliente":
-                            setCurrentStep(2);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto por el camino entre las gradas y el ascensor."
-                            );
-                            break;
+                        return;
 
-                        case "Ascensor":
-                            setCurrentStep(3);
-                            setDirection("left");
-                            setInstruction(
-                                "Gire a la izquierda hacia el área de Imágenes."
-                            );
-                            break;
-
-                        case "Imagenes":
-                            setCurrentStep(4);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto hacia Quimioterapia."
-                            );
-                            break;
-
-                        case "Quimioterapia":
-                            setCurrentStep(5);
-                            setDirection("right");
-                            setInstruction(
-                                "Gire a la derecha y continúe por el Pasillo"
-                            );
-                            break;
-
-                        case "PasilloD":
-                            setCurrentStep(6);
-                            setDirection("left");
-                            setInstruction(
-                                "A su izquierda verá una puerta color avellana con marcos metálicos. Esa es Emergencia."
-                            );
-                            break;
-
-                        case "Emergencia":
-                            setCurrentStep(7);
-                            setDirection("arrived");
-                            setInstruction(
-                                "Ha llegado al área de Emergencia."
-                            );
-                            break;
                     }
 
-                } finally {
+                    if (
+                        currentStep.current === 1 &&
+                        detected === "PuertaPrincipal"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 2;
+
+                        setCurrentStepUI(2);
+
+                        setDirection("up");
+
+                        setInstruction(
+                            "Avance hacia Atención al Cliente."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 2 &&
+                        detected === "AtencionCliente"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 3;
+
+                        setCurrentStepUI(3);
+
+                        setDirection("up");
+
+                        setInstruction(
+                            "Continúe recto por el camino entre las gradas y el ascensor."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 3 &&
+                        detected === "Ascensor"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 4;
+
+                        setCurrentStepUI(4);
+
+                        setDirection("left");
+
+                        setInstruction(
+                            "Gire a la izquierda hacia el área de Imágenes."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 4 &&
+                        detected === "Imagenes"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 5;
+
+                        setCurrentStepUI(5);
+
+                        setDirection("up");
+
+                        setInstruction(
+                            "Continúe recto hacia Quimioterapia."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 5 &&
+                        detected === "Quimioterapia"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 6;
+
+                        setCurrentStepUI(6);
+
+                        setDirection("right");
+
+                        setInstruction(
+                            "Gire a la derecha y continúe por el Pasillo."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 6 &&
+                        detected === "PasilloD"
+                    ) {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 7;
+
+                        setCurrentStepUI(7);
+
+                        setDirection("left");
+
+                        setInstruction(
+                            "A su izquierda verá una puerta color avellana con marcos metálicos. Esa es Emergencia."
+                        );
+
+                    }
+
+                    else if (
+                        currentStep.current === 7 &&
+                        detected === "Emergencia"
+                    ) {
+
+                        lastChange.current = now;
+
+                        setDirection("arrived");
+
+                        setInstruction(
+                            "Ha llegado al área de Emergencia."
+                        );
+
+                    }
+
+                }
+
+                finally {
+
                     isPredicting.current = false;
+
                 }
 
             }, 150);
@@ -164,9 +267,9 @@ export default function EmergenciaPage() {
             if (interval) clearInterval(interval);
 
             if (stream) {
-                stream.getTracks().forEach(track =>
-                    track.stop()
-                );
+
+                stream.getTracks().forEach(track => track.stop());
+
             }
 
         };
@@ -191,14 +294,16 @@ export default function EmergenciaPage() {
 
             default:
                 return null;
+
         }
 
     };
 
-    return (
+        return (
 
         <div className="ar-container">
 
+            {/* Cámara */}
             <video
                 ref={videoRef}
                 autoPlay
@@ -207,6 +312,7 @@ export default function EmergenciaPage() {
                 className="camera-video"
             />
 
+            {/* Guía Virtual */}
             <div className="guide-assistant">
 
                 <img
@@ -221,17 +327,19 @@ export default function EmergenciaPage() {
 
             </div>
 
+            {/* Flecha de navegación */}
             <div className="navigation-indicator">
                 {renderArrow()}
             </div>
 
+            {/* Ruta */}
             <div className="route-container">
 
                 <button
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/7)
+                    🗺 Ruta ({currentStepUI}/7)
                 </button>
 
                 {showRoute && (
@@ -240,31 +348,45 @@ export default function EmergenciaPage() {
 
                         <h3>Ruta a Emergencia</h3>
 
-                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 1 ? "active" : ""}`}
+                        >
                             Puerta Principal
                         </div>
 
-                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 2 ? "active" : ""}`}
+                        >
                             Atención al Cliente
                         </div>
 
-                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 3 ? "active" : ""}`}
+                        >
                             Ascensor
                         </div>
 
-                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 4 ? "active" : ""}`}
+                        >
                             Área de Imágenes
                         </div>
 
-                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 5 ? "active" : ""}`}
+                        >
                             Quimioterapia
                         </div>
 
-                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 6 ? "active" : ""}`}
+                        >
                             Pasillo D
                         </div>
 
-                        <div className={`route-step ${currentStep >= 7 ? "active" : ""}`}>
+                        <div
+                            className={`route-step ${currentStepUI >= 7 ? "active" : ""}`}
+                        >
                             Emergencia
                         </div>
 
@@ -274,6 +396,7 @@ export default function EmergenciaPage() {
 
             </div>
 
+            {/* Ubicación actual */}
             <div className="location-card">
                 <MapPin size={20} />
                 <span>{location}</span>

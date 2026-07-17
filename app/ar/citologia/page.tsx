@@ -153,7 +153,7 @@ export default function CitologiaPage() {
                         setCurrentStepUI(6);
 
                         setDirection("up");
-                        setInstruction("Continúe hasta Laboratorio Clínico");
+                        setInstruction("Continúe recto por el pasillo B hasta Laboratorio Clínico");
 
                     }
 
@@ -177,7 +177,7 @@ export default function CitologiaPage() {
                         setCurrentStepUI(8);
 
                         setDirection("right");
-                        setInstruction("A su izquierda encontrará la puerta de Citología");
+                        setInstruction("A su izquierda encontrará una puerta de vidrio con marco negro que es de Citología");
 
                     }
 

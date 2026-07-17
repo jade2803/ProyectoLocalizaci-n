@@ -11,613 +11,287 @@ import {
     MapPin,
 } from "lucide-react";
 
-
 export default function ProcedimientosPage() {
-
-
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const isPredicting = useRef(false);
 
     const lastPredictions = useRef<string[]>([]);
 
+    const lastChange = useRef(0);
 
+    const currentStep = useRef(1);
 
     const [location, setLocation] = useState("Buscando...");
 
-    const [instruction, setInstruction] = useState(
-        "Apunte la cámara"
-    );
-
+    const [instruction, setInstruction] = useState("Apunte la cámara");
 
     const [direction, setDirection] = useState<
         "up" | "right" | "left" | "arrived" | "none"
     >("none");
 
-
-
     const [showRoute, setShowRoute] = useState(false);
 
-    const [currentStep, setCurrentStep] = useState(1);
-
-
+    const [currentStepUI, setCurrentStepUI] = useState(1);
 
     useEffect(() => {
-
-
         let interval: NodeJS.Timeout;
 
         let stream: MediaStream;
 
         let model: any;
 
-
-
         async function init() {
-
-
             model = await tmImage.load(
                 "/model/model.json",
-                "/model/metadata.json"
+
+                "/model/metadata.json",
             );
 
-
-
             stream = await navigator.mediaDevices.getUserMedia({
-
                 video: {
-
                     facingMode: {
-                        ideal: "environment"
+                        ideal: "environment",
                     },
 
                     width: {
-                        ideal: 1280
+                        ideal: 1280,
                     },
 
                     height: {
-                        ideal: 720
+                        ideal: 720,
                     },
-
                 },
-
             });
 
-
-
             if (videoRef.current) {
-
                 videoRef.current.srcObject = stream;
 
-
                 videoRef.current.onloadedmetadata = () => {
-
                     videoRef.current?.play();
-
                 };
-
             }
 
-
-
-
             interval = setInterval(async () => {
+                if (!videoRef.current) return;
 
-
-                if (!videoRef.current)
-                    return;
-
-
-
-                if (isPredicting.current)
-                    return;
-
-
+                if (isPredicting.current) return;
 
                 isPredicting.current = true;
 
-
-
                 try {
+                    const predictions = await model.predict(videoRef.current);
 
-
-                    const predictions =
-                        await model.predict(videoRef.current);
-
-
-
-                    predictions.sort(
-                        (a: any, b: any) =>
-                            b.probability - a.probability
-                    );
-
-
+                    predictions.sort((a: any, b: any) => b.probability - a.probability);
 
                     const best = predictions[0];
 
-
-
                     if (best.probability < 0.6) {
-
                         setLocation("Buscando...");
 
                         return;
-
                     }
-
-
 
                     const detected = best.className;
 
-
-
                     setLocation(detected);
 
+                    lastPredictions.current.push(detected);
 
-
-                    lastPredictions.current.push(
-                        detected
-                    );
-
-
-
-                    if (lastPredictions.current.length > 2) {
-
+                    if (lastPredictions.current.length > 3) {
                         lastPredictions.current.shift();
-
                     }
-
-
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
-                        lastPredictions.current.every(
-                            (x) => x === detected
-                        );
+                        lastPredictions.current.length === 3 &&
+                        lastPredictions.current.every((x) => x === detected);
 
+                    if (!stable) return;
 
+                    const now = Date.now();
 
-                    if (!stable)
-                        return;
+                    if (now - lastChange.current < 2000) return;
 
+                    // PASO 1
+                    if (currentStep.current === 1 && detected === "PuertaPrincipal") {
+                        lastChange.current = now;
 
+                        currentStep.current = 2;
 
+                        setCurrentStepUI(2);
 
-                    switch (detected) {
+                        setDirection("up");
 
-
-
-                        case "PuertaPrincipal":
-
-
-                            setCurrentStep(1);
-
-                            setDirection("up");
-
-
-                            setInstruction(
-                                "Avance hacia Atención al Cliente"
-                            );
-
-
-                            break;
-
-
-
-
-
-                        case "AtencionCliente":
-
-
-                            setCurrentStep(2);
-
-
-                            setDirection("up");
-
-
-                            setInstruction(
-                                "Continúe recto por el camino entre las gradas y el ascensor"
-                            );
-
-
-                            break;
-
-
-
-
-
-                        case "Ascensor":
-
-
-                            setCurrentStep(3);
-
-
-                            setDirection("right");
-
-
-                            setInstruction(
-                                "Al pasar el ascensor gire a la derecha"
-                            );
-
-
-                            break;
-
-
-
-
-
-                        case "PasilloA":
-
-
-                            setCurrentStep(4);
-
-
-                            setDirection("up");
-
-
-                            setInstruction(
-                                "Continúe recto por el Pasillo del Bloque A"
-                            );
-
-
-                            break;
-
-
-
-
-
-                        case "PasilloB":
-
-
-                            setCurrentStep(5);
-
-
-                            setDirection("left");
-
-
-                            setInstruction(
-                                "Continúe hasta el final del pasillo y gire a la izquierda hacia Procedimientos"
-                            );
-
-
-                            break;
-
-
-
-
-
-                        case "Procedimientos":
-
-
-                            setCurrentStep(6);
-
-
-                            setDirection("arrived");
-
-
-                            setInstruction(
-                                "Ha llegado al área de Procedimientos"
-                            );
-
-
-                            break;
-
-
-
+                        setInstruction("Avance hacia Atención al Cliente");
                     }
 
+                    // PASO 2
+                    else if (
+                        currentStep.current === 2 &&
+                        detected === "AtencionCliente"
+                    ) {
+                        lastChange.current = now;
 
+                        currentStep.current = 3;
 
+                        setCurrentStepUI(3);
 
-                }
-                finally {
+                        setDirection("up");
 
+                        setInstruction("Continúe recto hacia el ascensor");
+                    }
+
+                    // PASO 3
+                    else if (currentStep.current === 3 && detected === "Ascensor") {
+                        lastChange.current = now;
+
+                        currentStep.current = 4;
+
+                        setCurrentStepUI(4);
+
+                        setDirection("right");
+
+                        setInstruction(
+                            "Al pasar el ascensor gire a la derecha hacia el Pasillo A",
+                        );
+                    }
+
+                    // PASO 4
+                    else if (currentStep.current === 4 && detected === "PasilloA") {
+                        lastChange.current = now;
+
+                        currentStep.current = 5;
+
+                        setCurrentStepUI(5);
+
+                        setDirection("up");
+
+                        setInstruction("Continúe recto por el Pasillo A");
+                    }
+
+                    // PASO 5
+                    else if (currentStep.current === 5 && detected === "PasilloB") {
+                        lastChange.current = now;
+
+                        currentStep.current = 6;
+
+                        setCurrentStepUI(6);
+
+                        setDirection("left");
+
+                        setInstruction(
+                            "Continúe hasta el final del pasillo y gire a la izquierda hacia Procedimientos",
+                        );
+                    }
+
+                    // FINAL
+                    else if (currentStep.current === 6 && detected === "Procedimientos") {
+                        lastChange.current = now;
+
+                        setDirection("arrived");
+
+                        setInstruction("Ha llegado al área de Procedimientos");
+                    }
+                } finally {
                     isPredicting.current = false;
-
                 }
-
-
-
             }, 150);
-
-
-
-
         }
-
-
 
         init();
 
-
-
-
         return () => {
-
-
-            if (interval)
-                clearInterval(interval);
-
-
+            if (interval) clearInterval(interval);
 
             if (stream) {
-
-                stream
-                    .getTracks()
-                    .forEach(
-                        track => track.stop()
-                    );
-
+                stream.getTracks().forEach((track) => track.stop());
             }
-
-
         };
-
-
-
     }, []);
 
-
-
-
-
-
     const renderArrow = () => {
-
-
         switch (direction) {
-
-
             case "up":
-
-                return (
-                    <ArrowUp
-                        size={50}
-                        strokeWidth={3}
-                    />
-                );
-
-
+                return <ArrowUp size={50} strokeWidth={3} />;
 
             case "right":
-
-                return (
-                    <ArrowRight
-                        size={50}
-                        strokeWidth={3}
-                    />
-                );
-
-
+                return <ArrowRight size={50} strokeWidth={3} />;
 
             case "left":
-
-                return (
-                    <ArrowLeft
-                        size={50}
-                        strokeWidth={3}
-                    />
-                );
-
-
+                return <ArrowLeft size={50} strokeWidth={3} />;
 
             case "arrived":
-
-                return (
-                    <CheckCircle2
-                        size={50}
-                        strokeWidth={3}
-                    />
-                );
-
-
+                return <CheckCircle2 size={50} strokeWidth={3} />;
 
             default:
-
                 return null;
-
         }
-
-
     };
 
-
-
-
-
     return (
-
         <div className="ar-container">
-
-
             <video
-
                 ref={videoRef}
-
                 autoPlay
-
                 playsInline
-
                 muted
-
                 className="camera-video"
-
             />
 
-
-
-
             <div className="guide-assistant">
-
-
                 <img
-
                     src="/guia-medica.png"
-
                     alt="Guía Virtual"
-
                     className="guide-image"
-
                 />
 
-
-
-                <div className="guide-bubble">
-
-                    {instruction}
-
-                </div>
-
-
+                <div className="guide-bubble">{instruction}</div>
             </div>
 
-
-
-
-
-
-            <div className="navigation-indicator">
-
-                {renderArrow()}
-
-            </div>
-
-
-
-
-
-
+            <div className="navigation-indicator">{renderArrow()}</div>
 
             <div className="route-container">
-
-
                 <button
-
                     className="route-toggle"
-
-                    onClick={() =>
-                        setShowRoute(!showRoute)
-                    }
-
+                    onClick={() => setShowRoute(!showRoute)}
                 >
-
-                    🗺 Ruta ({currentStep}/6)
-
-
+                    🗺 Ruta ({currentStepUI}/6)
                 </button>
 
+                {showRoute && (
+                    <div className="route-dropdown">
+                        <h3>Ruta a Procedimientos</h3>
 
+                        {[
+                            "Puerta Principal",
 
+                            "Atención al Cliente",
 
+                            "Ascensor",
 
+                            "Pasillo A",
 
-                {
-                    showRoute && (
+                            "Pasillo B",
 
-
-                        <div className="route-dropdown">
-
-
-                            <h3>
-                                Ruta a Procedimientos
-                            </h3>
-
-
-
-                            <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
-
-                                Puerta Principal
-
+                            "Procedimientos",
+                        ].map((item, index) => (
+                            <div
+                                key={item}
+                                className={`route-step ${currentStepUI >= index + 1 ? "active" : ""
+                                    }`}
+                            >
+                                {item}
                             </div>
-
-
-
-
-                            <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
-
-                                Atención al Cliente
-
-                            </div>
-
-
-
-
-
-                            <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
-
-                                Ascensor
-
-                            </div>
-
-
-
-
-
-                            <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
-
-                                Pasillo A
-
-                            </div>
-
-
-
-
-
-                            <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
-
-                                Pasillo B
-
-                            </div>
-
-
-
-
-
-                            <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
-
-                                Procedimientos
-
-                            </div>
-
-
-
-                        </div>
-
-
-                    )
-                }
-
-
-
+                        ))}
+                    </div>
+                )}
             </div>
-
-
-
-
-
-
 
             <div className="location-card">
-
-
                 <MapPin size={20} />
 
-
-                <span>
-
-                    {location}
-
-                </span>
-
-
+                <span>{location}</span>
             </div>
-
-
-
-
         </div>
-
-
     );
-
 }

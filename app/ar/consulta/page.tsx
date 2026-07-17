@@ -9,10 +9,11 @@ import {
     MapPin,
 } from "lucide-react";
 
-export default function ConsultaPage() {
+export default function CitologiaPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const isPredicting = useRef(false);
     const lastPredictions = useRef<string[]>([]);
+    const lastChange = useRef(0);
 
     const [location, setLocation] = useState("Buscando...");
     const [instruction, setInstruction] = useState("Apunte la cámara");
@@ -22,7 +23,9 @@ export default function ConsultaPage() {
     >("none");
 
     const [showRoute, setShowRoute] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStepUI, setCurrentStepUI] = useState(1);
+
+    const currentStep = useRef(1);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -38,14 +41,11 @@ export default function ConsultaPage() {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: { ideal: "environment" },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
                 },
             });
 
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
-
                 videoRef.current.onloadedmetadata = () => {
                     videoRef.current?.play();
                 };
@@ -58,7 +58,9 @@ export default function ConsultaPage() {
                 isPredicting.current = true;
 
                 try {
-                    const predictions = await model.predict(videoRef.current);
+                    const predictions = await model.predict(
+                        videoRef.current
+                    );
 
                     predictions.sort(
                         (a: any, b: any) =>
@@ -77,58 +79,115 @@ export default function ConsultaPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 2) {
+                    if (lastPredictions.current.length > 3) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
-                        lastPredictions.current.every((x) => x === detected);
+                        lastPredictions.current.length === 3 &&
+                        lastPredictions.current.every(
+                            (x) => x === detected
+                        );
 
                     if (!stable) return;
 
-                    switch (detected) {
-                        case "PuertaPrincipal":
-                            setCurrentStep(1);
-                            setDirection("up");
-                            setInstruction("Avance hacia Atención al Cliente");
-                            break;
+                    const now = Date.now();
 
-                        case "AtencionCliente":
-                            setCurrentStep(2);
-                            setDirection("up");
-                            setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
-                            break;
+                    if (now - lastChange.current < 2000) {
+                        return;
+                    }
 
-                        case "Ascensor":
-                            setCurrentStep(3);
-                            setDirection("right");
-                            setInstruction("Al pasar el ascensor, gire a la derecha");
-                            break;
+                    if (currentStep.current === 1 && detected === "PuertaPrincipal") {
 
-                        case "PasilloA":
-                            setCurrentStep(4);
-                            setDirection("up");
-                            setInstruction(
-                                "Continúe recto por el Pasillo del Bloque A"
-                            );
-                            break;
+                        lastChange.current = now;
 
-                        case "PasilloB":
-                            setCurrentStep(5);
-                            setDirection("right");
-                            setInstruction(
-                                "Siga avanzando. Consulta Externa está próxima a mano derecha una puerta de color Plomo"
-                            );
-                            break;
+                        currentStep.current = 2;
+                        setCurrentStepUI(2);
 
-                        case "ConsultaExterna":
-                            setCurrentStep(6);
-                            setDirection("arrived");
-                            setInstruction(
-                                "Ha llegado a Signos Vitales Consulta 1-15"
-                            );
-                            break;
+                        setDirection("up");
+                        setInstruction("Avance hacia Atención al Cliente");
+
+                    }
+
+                    else if (currentStep.current === 2 && detected === "AtencionCliente") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 3;
+                        setCurrentStepUI(3);
+
+                        setDirection("up");
+                        setInstruction("Continúe recto por el camino entre las gradas y el ascensor");
+
+                    }
+
+                    else if (currentStep.current === 3 && detected === "Ascensor") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 4;
+                        setCurrentStepUI(4);
+
+                        setDirection("right");
+                        setInstruction("Al pasar el ascensor, gire a la derecha hacia el Pasillo A");
+
+                    }
+
+                    else if (currentStep.current === 4 && detected === "PasilloA") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 5;
+                        setCurrentStepUI(5);
+
+                        setDirection("up");
+                        setInstruction("Continúe recto por el Pasillo A");
+
+                    }
+
+                    else if (currentStep.current === 5 && detected === "PasilloB") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 6;
+                        setCurrentStepUI(6);
+
+                        setDirection("up");
+                        setInstruction("Continúe recto por el pasillo B hasta Laboratorio Clínico");
+
+                    }
+
+                    else if (currentStep.current === 6 && detected === "LaboratorioClinico") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 7;
+                        setCurrentStepUI(7);
+
+                        setDirection("up");
+                        setInstruction("Siga avanzando por el Pasillo C");
+
+                    }
+
+                    else if (currentStep.current === 7 && detected === "PasilloC") {
+
+                        lastChange.current = now;
+
+                        currentStep.current = 8;
+                        setCurrentStepUI(8);
+
+                        setDirection("right");
+                        setInstruction("A su izquierda encontrará una puerta de vidrio con marco negro que es de Citología");
+
+                    }
+
+                    else if (currentStep.current === 8 && detected === "Citologia") {
+
+                        lastChange.current = now;
+
+                        setDirection("arrived");
+                        setInstruction("Ha llegado a Citología");
+
                     }
                 } finally {
                     isPredicting.current = false;
@@ -140,8 +199,11 @@ export default function ConsultaPage() {
 
         return () => {
             if (interval) clearInterval(interval);
+
             if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
+                stream.getTracks().forEach((track) =>
+                    track.stop()
+                );
             }
         };
     }, []);
@@ -150,10 +212,13 @@ export default function ConsultaPage() {
         switch (direction) {
             case "up":
                 return <ArrowUp size={50} strokeWidth={3} />;
+
             case "right":
                 return <ArrowRight size={50} strokeWidth={3} />;
+
             case "arrived":
                 return <CheckCircle2 size={50} strokeWidth={3} />;
+
             default:
                 return null;
         }
@@ -161,8 +226,6 @@ export default function ConsultaPage() {
 
     return (
         <div className="ar-container">
-
-            {/* Cámara */}
             <video
                 ref={videoRef}
                 autoPlay
@@ -171,7 +234,6 @@ export default function ConsultaPage() {
                 className="camera-video"
             />
 
-            {/* Guía virtual */}
             <div className="guide-assistant">
                 <img
                     src="/guia-medica.png"
@@ -184,55 +246,45 @@ export default function ConsultaPage() {
                 </div>
             </div>
 
-            {/* Flecha navegación */}
             <div className="navigation-indicator">
                 {renderArrow()}
             </div>
 
-            {/* Ruta */}
             <div className="route-container">
-
                 <button
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStep}/6)
+                    🗺 Ruta ({currentStepUI}/8)
                 </button>
 
                 {showRoute && (
                     <div className="route-dropdown">
+                        <h3>Ruta Completa</h3>
 
-                        <h3>Ruta a Consulta Externa</h3>
-
-                        <div className={`route-step ${currentStep >= 1 ? "active" : ""}`}>
-                            Puerta Principal
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 2 ? "active" : ""}`}>
-                            Atención al Cliente
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 3 ? "active" : ""}`}>
-                            Ascensor
-                        </div>
-
-                        <div className={`route-step ${currentStep >= 4 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 4 ? "active" : ""}`}>
                             Pasillo A
                         </div>
 
-                        <div className={`route-step ${currentStep >= 5 ? "active" : ""}`}>
+                        <div className={`route-step ${currentStepUI >= 5 ? "active" : ""}`}>
                             Pasillo B
                         </div>
 
-                        <div className={`route-step ${currentStep >= 6 ? "active" : ""}`}>
-                            Consulta Externa
+                        <div className={`route-step ${currentStepUI >= 6 ? "active" : ""}`}>
+                            Laboratorio Clínico
                         </div>
 
+                        <div className={`route-step ${currentStepUI >= 7 ? "active" : ""}`}>
+                            Pasillo C
+                        </div>
+
+                        <div className={`route-step ${currentStepUI >= 8 ? "active" : ""}`}>
+                            Citología
+                        </div>
                     </div>
                 )}
             </div>
 
-            {/* Ubicación */}
             <div className="location-card">
                 <MapPin size={20} />
                 <span>{location}</span>
