@@ -45,7 +45,7 @@ export default function Pisos() {
 
           {/* Piso 1 */}
 
-          <button className="menu-button piso-button" disabled>
+          <Link href="/piso1" className="menu-button piso-button">
 
             <span className="icon">🛏️</span>
 
@@ -54,11 +54,11 @@ export default function Pisos() {
               <p>Hospitalización - Oncología Clínica</p>
             </div>
 
-          </button>
+          </Link>
 
           {/* Piso 2 */}
 
-          <button className="menu-button piso-button" disabled>
+          <Link href="/piso2" className="menu-button piso-button">
 
             <span className="icon">🏨</span>
 
@@ -67,7 +67,7 @@ export default function Pisos() {
               <p>Hospitalización - Cirugía Oncológica</p>
             </div>
 
-          </button>
+          </Link>
 
         </div>
 
