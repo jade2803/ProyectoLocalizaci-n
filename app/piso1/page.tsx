@@ -162,10 +162,7 @@ export default function Piso1Page() {
                     }
 
                     // PASO 3
-                    else if (
-                        currentStep.current === 3 &&
-                        detected === "Gradas"
-                    ) {
+                    if (detected === "Gradas") {
 
                         lastChange.current = now;
 

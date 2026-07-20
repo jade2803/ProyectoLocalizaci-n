@@ -69,7 +69,7 @@ export default function CitologiaPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.6) {
+                    if (best.probability < 0.4) {
                         setLocation("Buscando...");
                         return;
                     }
@@ -79,12 +79,12 @@ export default function CitologiaPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 3) {
+                    if (lastPredictions.current.length > 2) {
                         lastPredictions.current.shift();
                     }
 
                     const stable =
-                        lastPredictions.current.length === 3 &&
+                        lastPredictions.current.length === 2 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
@@ -93,7 +93,7 @@ export default function CitologiaPage() {
 
                     const now = Date.now();
 
-                    if (now - lastChange.current < 2000) {
+                    if (now - lastChange.current < 800) {
                         return;
                     }
 

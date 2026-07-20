@@ -92,7 +92,7 @@ export default function CajasPage() {
                     // ---------- Espera entre cambios ----------
                     const now = Date.now();
 
-                    if (now - lastChange.current < 1000) {
+                    if (now - lastChange.current < 800) {
                         return;
                     }
 
