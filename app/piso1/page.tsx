@@ -86,7 +86,7 @@ export default function Piso1Page() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.5) {
+                    if (best.probability < 0.4) {
 
                         setLocation("Buscando...");
                         return;
@@ -115,7 +115,7 @@ export default function Piso1Page() {
 
                     const now = Date.now();
 
-                    if (now - lastChange.current < 1000) {
+                    if (now - lastChange.current < 800) {
 
                         return;
 
