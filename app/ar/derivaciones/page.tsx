@@ -87,7 +87,7 @@ export default function DerivacionesPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.6) {
+                    if (best.probability < 0.8) {
 
                         setLocation("Buscando...");
                         return;
@@ -100,14 +100,14 @@ export default function DerivacionesPage() {
 
                     lastPredictions.current.push(detected);
 
-                    if (lastPredictions.current.length > 2) {
+                    if (lastPredictions.current.length > 3) {
 
                         lastPredictions.current.shift();
 
                     }
 
                     const stable =
-                        lastPredictions.current.length === 2 &&
+                        lastPredictions.current.length === 3 &&
                         lastPredictions.current.every(
                             (x) => x === detected
                         );
