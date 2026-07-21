@@ -87,7 +87,7 @@ export default function DerivacionesPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.45) {
+                    if (best.probability < 0.6) {
 
                         setLocation("Buscando...");
                         return;
@@ -116,7 +116,7 @@ export default function DerivacionesPage() {
 
                     const now = Date.now();
 
-                    if (now - lastChange.current < 800) {
+                    if (now - lastChange.current < 1000) {
 
                         return;
 
