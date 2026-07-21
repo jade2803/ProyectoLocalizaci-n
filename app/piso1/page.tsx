@@ -44,8 +44,8 @@ export default function Piso1Page() {
         async function init() {
 
             model = await tmImage.load(
-                "/model/model.json",
-                "/model/metadata.json"
+                "/model2/model.json",
+                "/model2/metadata.json"
             );
 
             stream = await navigator.mediaDevices.getUserMedia({
@@ -306,8 +306,8 @@ export default function Piso1Page() {
 
                         <div
                             className={`route-step ${currentStepUI >= 1
-                                    ? "active"
-                                    : ""
+                                ? "active"
+                                : ""
                                 }`}
                         >
                             Puerta Principal
@@ -315,8 +315,8 @@ export default function Piso1Page() {
 
                         <div
                             className={`route-step ${currentStepUI >= 2
-                                    ? "active"
-                                    : ""
+                                ? "active"
+                                : ""
                                 }`}
                         >
                             Atención al Cliente
@@ -324,8 +324,8 @@ export default function Piso1Page() {
 
                         <div
                             className={`route-step ${currentStepUI >= 3
-                                    ? "active"
-                                    : ""
+                                ? "active"
+                                : ""
                                 }`}
                         >
                             Gradas
@@ -333,8 +333,8 @@ export default function Piso1Page() {
 
                         <div
                             className={`route-step ${currentStepUI >= 4
-                                    ? "active"
-                                    : ""
+                                ? "active"
+                                : ""
                                 }`}
                         >
                             Primer Piso
@@ -342,8 +342,8 @@ export default function Piso1Page() {
 
                         <div
                             className={`route-step ${currentStepUI >= 5
-                                    ? "active"
-                                    : ""
+                                ? "active"
+                                : ""
                                 }`}
                         >
                             Destino alcanzado

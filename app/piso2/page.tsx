@@ -44,8 +44,8 @@ export default function Piso2Page() {
         async function init() {
 
             model = await tmImage.load(
-                "/model/model.json",
-                "/model/metadata.json"
+                "/model2/model.json",
+                "/model2/metadata.json"
             );
 
             stream = await navigator.mediaDevices.getUserMedia({
