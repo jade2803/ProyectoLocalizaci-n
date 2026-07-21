@@ -36,7 +36,11 @@ export default function QuimioterapiaPage() {
         let model: any;
 
         async function init() {
-            model = await tmImage.load("/model/model.json", "/model/metadata.json");
+            model = await tmImage.load(
+                "/model3/model.json",
+                "/model3/metadata.json"
+            );
+
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {

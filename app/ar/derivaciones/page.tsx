@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import * as tmImage from "@teachablemachine/image";
 import {
     ArrowUp,
+    ArrowRight,
     ArrowLeft,
     CheckCircle2,
     MapPin,
 } from "lucide-react";
 
-export default function ImagenesPage() {
+export default function DerivacionesPage() {
 
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -23,10 +24,12 @@ export default function ImagenesPage() {
 
     const [location, setLocation] = useState("Buscando...");
 
-    const [instruction, setInstruction] = useState("Apunte la cámara");
+    const [instruction, setInstruction] = useState(
+        "Apunte la cámara"
+    );
 
     const [direction, setDirection] = useState<
-        "up" | "left" | "arrived" | "none"
+        "up" | "right" | "left" | "arrived" | "none"
     >("none");
 
     const [showRoute, setShowRoute] = useState(false);
@@ -42,10 +45,9 @@ export default function ImagenesPage() {
         async function init() {
 
             model = await tmImage.load(
-                "/model3/model.json",
-                "/model3/metadata.json"
+                "/model4/model.json",
+                "/model4/metadata.json"
             );
-
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
@@ -75,7 +77,8 @@ export default function ImagenesPage() {
 
                 try {
 
-                    const predictions = await model.predict(videoRef.current);
+                    const predictions =
+                        await model.predict(videoRef.current);
 
                     predictions.sort(
                         (a: any, b: any) =>
@@ -84,7 +87,7 @@ export default function ImagenesPage() {
 
                     const best = predictions[0];
 
-                    if (best.probability < 0.4) {
+                    if (best.probability < 0.45) {
 
                         setLocation("Buscando...");
                         return;
@@ -119,6 +122,7 @@ export default function ImagenesPage() {
 
                     }
 
+                    // PASO 1
                     if (
                         currentStep.current === 1 &&
                         detected === "PuertaPrincipal"
@@ -130,17 +134,18 @@ export default function ImagenesPage() {
 
                         setCurrentStepUI(2);
 
-                        setDirection("up");
+                        setDirection("right");
 
                         setInstruction(
-                            "Avance hacia Atención al Cliente"
+                            "Gire a la derecha hacia el pasillo ubicado junto a la Farmacia Económica."
                         );
 
                     }
 
+                    // PASO 2
                     else if (
                         currentStep.current === 2 &&
-                        detected === "AtencionCliente"
+                        detected === "FarmaciaEco"
                     ) {
 
                         lastChange.current = now;
@@ -152,14 +157,15 @@ export default function ImagenesPage() {
                         setDirection("up");
 
                         setInstruction(
-                            "Continúe recto por el camino entre las gradas y el Ascensor"
+                            "Continúe recto por el pasillo del Bloque A."
                         );
 
                     }
 
+                    // PASO 3
                     else if (
                         currentStep.current === 3 &&
-                        detected === "Ascensor"
+                        detected === "PasilloAParteDelantera"
                     ) {
 
                         lastChange.current = now;
@@ -171,22 +177,27 @@ export default function ImagenesPage() {
                         setDirection("left");
 
                         setInstruction(
-                            "Gire a la izquierda hacia Imágenes"
+                            "A su lado izquierdo encontrará las oficinas de Derivaciones."
                         );
 
                     }
 
+                    // PASO 4
                     else if (
                         currentStep.current === 4 &&
-                        detected === "Imagenes"
+                        detected === "Derivaciones"
                     ) {
 
                         lastChange.current = now;
 
+                        currentStep.current = 5;
+
+                        setCurrentStepUI(5);
+
                         setDirection("arrived");
 
                         setInstruction(
-                            "Ha llegado al área de Imágenes"
+                            "Ha llegado a Derivaciones."
                         );
 
                     }
@@ -228,11 +239,19 @@ export default function ImagenesPage() {
             case "up":
                 return <ArrowUp size={50} strokeWidth={3} />;
 
+            case "right":
+                return <ArrowRight size={50} strokeWidth={3} />;
+
             case "left":
                 return <ArrowLeft size={50} strokeWidth={3} />;
 
             case "arrived":
-                return <CheckCircle2 size={50} strokeWidth={3} />;
+                return (
+                    <CheckCircle2
+                        size={50}
+                        strokeWidth={3}
+                    />
+                );
 
             default:
                 return null;
@@ -242,6 +261,7 @@ export default function ImagenesPage() {
     };
 
     return (
+
         <div className="ar-container">
 
             {/* Cámara */}
@@ -280,37 +300,48 @@ export default function ImagenesPage() {
                     className="route-toggle"
                     onClick={() => setShowRoute(!showRoute)}
                 >
-                    🗺 Ruta ({currentStepUI}/4)
+                    🗺 Ruta ({currentStepUI}/5)
                 </button>
 
                 {showRoute && (
 
                     <div className="route-dropdown">
 
-                        <h3>Ruta a Imágenes</h3>
+                        <h3>Ruta a Derivaciones</h3>
 
                         <div
-                            className={`route-step ${currentStepUI >= 1 ? "active" : ""}`}
+                            className={`route-step ${currentStepUI >= 1 ? "active" : ""
+                                }`}
                         >
                             Puerta Principal
                         </div>
 
                         <div
-                            className={`route-step ${currentStepUI >= 2 ? "active" : ""}`}
+                            className={`route-step ${currentStepUI >= 2 ? "active" : ""
+                                }`}
                         >
-                            Atención al Cliente
+                            Farmacia Económica
                         </div>
 
                         <div
-                            className={`route-step ${currentStepUI >= 3 ? "active" : ""}`}
+                            className={`route-step ${currentStepUI >= 3 ? "active" : ""
+                                }`}
                         >
-                            Ascensor
+                            Pasillo Bloque A
                         </div>
 
                         <div
-                            className={`route-step ${currentStepUI >= 4 ? "active" : ""}`}
+                            className={`route-step ${currentStepUI >= 4 ? "active" : ""
+                                }`}
                         >
-                            Área de Imágenes
+                            Derivaciones
+                        </div>
+
+                        <div
+                            className={`route-step ${currentStepUI >= 5 ? "active" : ""
+                                }`}
+                        >
+                            Destino alcanzado
                         </div>
 
                     </div>
@@ -321,10 +352,15 @@ export default function ImagenesPage() {
 
             {/* Ubicación actual */}
             <div className="location-card">
+
                 <MapPin size={20} />
+
                 <span>{location}</span>
+
             </div>
 
         </div>
+
     );
+
 }

@@ -43,9 +43,10 @@ export default function FarmaciaPage() {
         async function init() {
 
             model = await tmImage.load(
-                "/model/model.json",
-                "/model/metadata.json"
+                "/model3/model.json",
+                "/model3/metadata.json"
             );
+
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
@@ -171,7 +172,7 @@ export default function FarmaciaPage() {
                         setDirection("right");
 
                         setInstruction(
-                            "Gire a la derecha y continúe por el pasillo"
+                            "Gire a la derecha y continúe por el pasillo a su lado derecho vera la ventanilla de Farmacia"
                         );
 
                     }
@@ -244,7 +245,7 @@ export default function FarmaciaPage() {
 
     };
 
-        return (
+    return (
         <div className="ar-container">
 
             {/* Cámara */}

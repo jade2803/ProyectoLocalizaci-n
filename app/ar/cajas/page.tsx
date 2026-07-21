@@ -33,8 +33,8 @@ export default function CajasPage() {
 
         async function init() {
             model = await tmImage.load(
-                "/model/model.json",
-                "/model/metadata.json"
+                "/model3/model.json",
+                "/model3/metadata.json"
             );
 
             stream = await navigator.mediaDevices.getUserMedia({

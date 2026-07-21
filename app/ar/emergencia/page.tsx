@@ -43,9 +43,10 @@ export default function EmergenciaPage() {
         async function init() {
 
             model = await tmImage.load(
-                "/model/model.json",
-                "/model/metadata.json"
+                "/model3/model.json",
+                "/model3/metadata.json"
             );
+
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
@@ -299,7 +300,7 @@ export default function EmergenciaPage() {
 
     };
 
-        return (
+    return (
 
         <div className="ar-container">
 
