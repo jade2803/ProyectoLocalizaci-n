@@ -174,10 +174,10 @@ export default function DerivacionesPage() {
 
                         setCurrentStepUI(4);
 
-                        setDirection("left");
+                        setDirection("up");
 
                         setInstruction(
-                            "A su lado izquierdo encontrará las oficinas de Derivaciones."
+                            "Continue recto por el pasillo del bloque A, a su lado izquierdo encontrará las oficinas de Derivaciones."
                         );
 
                     }
