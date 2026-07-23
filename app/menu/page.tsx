@@ -97,6 +97,22 @@ export default function Home() {
             </div>
           </Link>
 
+          <Link href="/ar/consulta1-7" className="menu-button">
+            <span className="icon">🚪</span>
+            <div>
+              <h2>Consulta Externa 1 - 7</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
+          <Link href="/ar/consulta9-16" className="menu-button">
+            <span className="icon">🚪</span>
+            <div>
+              <h2>Consulta Externa 8 - 16</h2>
+              <p>Iniciar navegación</p>
+            </div>
+          </Link>
+
           <Link href="/ar/consulta18" className="menu-button">
             <span className="icon">🚪</span>
             <div>
@@ -149,22 +165,6 @@ export default function Home() {
             <span className="icon">🏥</span>
             <div>
               <h2>UCI - Cuidados Intensivos</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/consulta1-7" className="menu-button">
-            <span className="icon">🚪</span>
-            <div>
-              <h2>Consulta Externa 1 - 7</h2>
-              <p>Iniciar navegación</p>
-            </div>
-          </Link>
-
-          <Link href="/ar/consulta9-16" className="menu-button">
-            <span className="icon">🚪</span>
-            <div>
-              <h2>Consulta Externa 8 - 16</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
