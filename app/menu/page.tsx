@@ -156,7 +156,7 @@ export default function Home() {
           <Link href="/ar/consulta9-16" className="menu-button">
             <span className="icon">🚪</span>
             <div>
-              <h2>Consulta Externa 9 - 16</h2>
+              <h2>Consulta Externa 8 - 16</h2>
               <p>Iniciar navegación</p>
             </div>
           </Link>
