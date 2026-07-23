@@ -35,8 +35,8 @@ export default function Consulta17Page() {
 
         async function init() {
             model = await tmImage.load(
-                "/model-consulta17/model.json",
-                "/model-consulta17/metadata.json"
+                "/model5/model.json",
+                "/model5/metadata.json"
             );
 
             stream = await navigator.mediaDevices.getUserMedia({
